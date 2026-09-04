@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-cream: #F7F1E2;
+  --color-brand-paper: #FFFDF9;
+  --color-brand-maroon: #6E2C1F;
+  --color-brand-maroon-dark: #5C1D18;
+  --color-brand-sky: #AECBDB;
+  --color-brand-sky-dark: #87AAC1;
+  --color-brand-gold: #D4AF37;
+  --color-brand-slate: #4A5568;
+
+  --font-heading: var(--font-baloo), 'Baloo 2', cursive, sans-serif;
+  --font-body: var(--font-nunito), 'Nunito', system-ui, sans-serif;
+}
+
+:root {
+  --background: #F7F1E2;
+  --foreground: #6E2C1F;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Authentic Torn-Paper Edge Masks */
+.torn-paper-bottom {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 16px),
+    98% calc(100% - 8px),
+    95% calc(100% - 20px),
+    91% calc(100% - 4px),
+    87% calc(100% - 18px),
+    82% calc(100% - 6px),
+    78% calc(100% - 22px),
+    73% calc(100% - 5px),
+    68% calc(100% - 16px),
+    63% calc(100% - 7px),
+    57% calc(100% - 20px),
+    52% calc(100% - 4px),
+    47% calc(100% - 18px),
+    42% calc(100% - 6px),
+    36% calc(100% - 22px),
+    31% calc(100% - 5px),
+    26% calc(100% - 17px),
+    21% calc(100% - 6px),
+    15% calc(100% - 20px),
+    10% calc(100% - 5px),
+    5% calc(100% - 16px),
+    0 calc(100% - 4px)
+  );
+}
+
+.torn-paper-top {
+  clip-path: polygon(
+    0 16px,
+    4% 6px,
+    9% 20px,
+    14% 5px,
+    19% 18px,
+    24% 4px,
+    29% 22px,
+    35% 6px,
+    40% 17px,
+    45% 5px,
+    51% 20px,
+    56% 7px,
+    62% 19px,
+    67% 4px,
+    72% 22px,
+    77% 6px,
+    83% 18px,
+    88% 5px,
+    94% 20px,
+    100% 8px,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Focus Ring Custom Styling */
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-maroon focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream;
+}

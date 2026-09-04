@@ -1,0 +1,237 @@
+// Prisma Schema for Little Lambs E-Commerce Platform
+// Engine: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum BookStatus {
+  DRAFT
+  COMING_SOON
+  ACTIVE
+  OUT_OF_STOCK
+  ARCHIVED
+}
+
+enum ImageType {
+  COVER_FRONT
+  COVER_BACK
+  PREVIEW
+  PROMOTIONAL
+}
+
+enum PaymentMethod {
+  UPI_MANUAL
+}
+
+enum PaymentStatus {
+  PENDING
+  VERIFICATION_PENDING
+  PAID
+  REJECTED
+  REFUNDED
+}
+
+enum FulfilmentStatus {
+  AWAITING_PAYMENT
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  passwordHash    String
+  fullName        String
+  phone           String?
+  role            Role     @default(CUSTOMER)
+  isEmailVerified Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  addresses Address[]
+  cart      Cart?
+  orders    Order[]
+  auditLogs AuditLog[]
+}
+
+model Book {
+  id               String     @id @default(uuid())
+  title            String
+  subtitle         String?
+  slug             String     @unique
+  sku              String     @unique
+  isbn             String     @unique
+  description      String
+  shortDescription String?
+  ageMin           Int
+  ageMax           Int
+  language         String
+  publisher        String
+  edition          String?
+  releaseDate      DateTime?
+  price            Decimal    @db.Decimal(10, 2)
+  stock            Int        @default(0) // Physical total unsold inventory
+  reservedStock    Int        @default(0) // Inventory locked in active unpaid/pending orders
+  status           BookStatus @default(DRAFT)
+  featured         Boolean    @default(false)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  images     BookImage[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+}
+
+model BookImage {
+  id         String    @id @default(uuid())
+  bookId     String
+  imageUrl   String
+  storageKey String
+  altText    String
+  sortOrder  Int       @default(0)
+  type       ImageType @default(COVER_FRONT)
+  createdAt  DateTime  @default(now())
+
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+}
+
+model Address {
+  id            String   @id @default(uuid())
+  userId        String
+  recipientName String
+  phone         String
+  addressLine1  String
+  addressLine2  String?
+  city          String
+  district      String
+  state         String
+  postalCode    String
+  landmark      String?
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Cart {
+  id        String   @id @default(uuid())
+  userId    String   @unique // Required for V1 Authenticated Cart
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartItem[]
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  bookId    String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id                   String           @id @default(uuid())
+  orderNumber          String           @unique // Format: LL-YYYY-XXXXXX
+  userId               String
+  paymentStatus        PaymentStatus    @default(PENDING)
+  fulfilmentStatus     FulfilmentStatus @default(AWAITING_PAYMENT)
+  subtotalAmount       Decimal          @db.Decimal(10, 2)
+  shippingAmount       Decimal          @db.Decimal(10, 2)
+  totalAmount          Decimal          @db.Decimal(10, 2)
+  customerNotes        String?
+  reservationExpiresAt DateTime? // Timestamp when reservation expires (null if paid/cancelled)
+  placedAt             DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+
+  user            User                  @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+  addressSnapshot OrderAddressSnapshot?
+  payments        Payment[]
+  auditLogs       AuditLog[]
+}
+
+model OrderItem {
+  id                String  @id @default(uuid())
+  orderId           String
+  bookId            String
+  titleSnapshot     String
+  skuSnapshot       String
+  unitPriceSnapshot Decimal @db.Decimal(10, 2)
+  quantity          Int
+  lineTotal         Decimal @db.Decimal(10, 2)
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  book  Book  @relation(fields: [bookId], references: [id])
+}
+
+model OrderAddressSnapshot {
+  id            String  @id @default(uuid())
+  orderId       String  @unique
+  recipientName String
+  phone         String
+  addressLine1  String
+  addressLine2  String?
+  city          String
+  district      String
+  state         String
+  postalCode    String
+  landmark      String?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id                   String        @id @default(uuid())
+  orderId              String
+  method               PaymentMethod @default(UPI_MANUAL)
+  expectedAmount       Decimal       @db.Decimal(10, 2)
+  utrReference         String?       @unique // Unique index prevents UTR reuse
+  screenshotUrl        String?
+  screenshotStorageKey String?
+  status               PaymentStatus @default(PENDING)
+  verifiedByUserId     String?
+  rejectionReason      String?
+  adminNote            String?
+  submittedAt          DateTime?
+  verifiedAt           DateTime?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  actorUserId String?
+  action      String
+  entityType  String
+  entityId    String?
+  payload     Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  actor User?  @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+  order Order? @relation(fields: [entityId], references: [id], onDelete: SetNull)
+}
