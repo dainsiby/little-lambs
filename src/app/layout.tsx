@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Baloo_2, Nunito } from 'next/font/google';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import SessionProvider from '@/components/providers/SessionProvider';
 import './globals.css';
 
 const baloo2 = Baloo_2({
@@ -71,9 +72,11 @@ export default function RootLayout({
         />
       </head>
       <body className="flex min-h-screen flex-col bg-brand-cream text-brand-maroon antialiased font-body">
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
+        <SessionProvider>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   );

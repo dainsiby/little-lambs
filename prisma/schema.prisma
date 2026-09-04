@@ -66,6 +66,7 @@ model User {
   cart      Cart?
   orders    Order[]
   auditLogs AuditLog[]
+  passwordResetTokens PasswordResetToken[]
 }
 
 model Book {
@@ -168,7 +169,6 @@ model Order {
   items           OrderItem[]
   addressSnapshot OrderAddressSnapshot?
   payments        Payment[]
-  auditLogs       AuditLog[]
 }
 
 model OrderItem {
@@ -232,6 +232,16 @@ model AuditLog {
   userAgent   String?
   createdAt   DateTime @default(now())
 
-  actor User?  @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
-  order Order? @relation(fields: [entityId], references: [id], onDelete: SetNull)
+  actor User? @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
 }
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
