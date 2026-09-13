@@ -5,6 +5,7 @@ export function HeroHeadlineUnderline() {
     <svg
       className="hero-underline-svg"
       viewBox="0 0 380 24"
+      preserveAspectRatio="none"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"

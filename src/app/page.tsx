@@ -1,3 +1,4 @@
+import "./landing-reference.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { LandingHero } from "@/components/home/LandingHero";
 import { CuriousMindsSection } from "@/components/home/CuriousMindsSection";
@@ -10,8 +11,10 @@ export default function Home() {
   return (
     <main id="main-content" className="site-canvas-outer">
       <div className="site-canvas-frame">
-        <SiteHeader />
-        <LandingHero />
+        <div className="reference-landing">
+          <SiteHeader landing />
+          <LandingHero />
+        </div>
         <CuriousMindsSection />
         <OurStoryTeaser />
         <OurBooksCatalogueSection />

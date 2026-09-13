@@ -1,0 +1,58 @@
+/* Homepage-only composition. Shared page/header styles remain unchanged. */
+.reference-landing { position: relative; --navy: #071d49; --paper: #fffdf7; }
+.reference-landing .site-header { position: absolute; inset: 0 0 auto; background: transparent; border: 0; padding: 28px 3.5%; align-items: flex-start; }
+.reference-landing .brand-link { width: clamp(110px, 12vw, 160px); }
+.reference-landing .header-actions { margin-top: 18px; gap: 28px; padding: 12px 18px; border-radius: 40px; background: rgba(255,253,247,.83); box-shadow: 0 0 28px 16px rgba(255,253,247,.55); }
+.reference-landing .main-navigation { font-size: 12px; text-transform: uppercase; gap: clamp(16px, 2.3vw, 34px); }
+.reference-landing .cart-pill-button { border: 0; background: transparent; border-radius: 0; padding: 4px; min-width: 44px; min-height: 44px; justify-content: center; }
+.reference-landing .split-hero-grid { display: block; min-height: 800px; height: max(800px, calc(100svh - 44px)); max-height: 1000px; }
+.reference-landing .hero-editorial-panel { width: 48%; height: 100%; background: transparent; }
+.reference-landing .hero-editorial-content { padding: 205px 10% 36px 8%; justify-content: center; }
+.reference-landing .split-hero-headline { font-size: clamp(43px, 4.55vw, 66px); line-height: 1.04; letter-spacing: -.055em; margin-bottom: 28px; }
+.reference-landing .split-hero-description { font-size: clamp(17px, 1.6vw, 22px); line-height: 1.4; color: var(--navy); margin-bottom: 26px; }
+.reference-landing .hero-purchase-row { margin-bottom: 38px; }
+.reference-landing .explore-books-cta { background: #941c18; text-transform: none; font-size: clamp(18px, 1.9vw, 25px); font-weight: 500; letter-spacing: 0; padding: 15px 30px; min-width: 78%; justify-content: center; box-shadow: none; }
+.reference-landing .explore-books-cta:hover { background: #761613; }
+.reference-landing .hero-feature-badges { max-width: 90%; gap: 0; margin-bottom: 24px; padding-top: 10px; }
+.reference-landing .feature-badge-item { font-size: 13px; font-weight: 500; padding: 0 12px; gap: 12px; }
+.reference-landing .feature-badge-item + .feature-badge-item { border-left: 1px solid #dedbd1; }
+.reference-landing .feature-badge-icon svg { width: 30px; height: 30px; stroke-width: 1.4; }
+.reference-landing .hero-signature-wrap { max-width: 90%; text-align: center; margin-top: 18px; }
+.reference-landing .hero-signature-text { font-size: 23px; }
+.reference-landing .hero-illustration-panel { position: absolute; inset: 0 0 0 auto; width: 65%; height: 100%; }
+.reference-landing .hero-story-img { object-position: center 58% !important; }
+.reference-landing .hero-paper-desktop { position: absolute; inset: 0 auto 0 0; width: 49%; height: 100%; z-index: 2; pointer-events: none; }
+.reference-landing .hero-paper-mobile { display: none; }
+#books { scroll-margin-top: 24px; }
+@media (max-width: 1100px) and (min-width: 901px) {
+  .reference-landing .hero-editorial-content { padding-top: 175px; }
+  .reference-landing .header-actions { gap: 14px; padding: 8px; }
+  .reference-landing .main-navigation { gap: 16px; font-size: 11px; }
+  .reference-landing .split-hero-grid { min-height: 760px; }
+}
+@media (max-width: 900px) {
+  .reference-landing .site-header { position: relative; padding: 20px 24px 12px; align-items: center; }
+  .reference-landing .brand-link { width: 100px; }
+  .reference-landing .header-actions { margin: 0; padding: 0; gap: 12px; background: none; box-shadow: none; }
+  .reference-landing .menu-toggle { border: 0; border-radius: 0; width: 44px; height: 44px; }
+  .reference-landing .menu-toggle svg { width: 28px; height: 28px; }
+  .reference-landing .main-navigation { top: calc(100% - 8px); font-size: 14px; gap: 18px; }
+  .reference-landing .split-hero-grid { height: auto; min-height: 0; max-height: none; }
+  .reference-landing .hero-editorial-panel { width: 100%; height: auto; background: var(--paper); }
+  .reference-landing .hero-editorial-content { padding: 18px 26px 12px; }
+  .reference-landing .split-hero-headline { font-size: clamp(32px, 9.3vw, 64px); letter-spacing: -.055em; margin-bottom: 20px; }
+  .reference-landing .split-hero-description { max-width: 430px; font-size: 17px; margin-bottom: 20px; }
+  .reference-landing .hero-purchase-row { margin-bottom: 0; }
+  .reference-landing .explore-books-cta { min-width: 0; width: min(100%, 360px); font-size: 21px; padding: 13px 20px; }
+  .reference-landing .hero-feature-badges, .reference-landing .hero-signature-wrap, .reference-landing .hero-paper-desktop { display: none; }
+  .reference-landing .hero-illustration-panel { position: relative; inset: auto; width: 100%; height: clamp(410px, 115vw, 700px); }
+  .reference-landing .hero-paper-mobile { display: block; position: absolute; inset: -1px 0 auto; width: 100%; height: 80px; z-index: 2; pointer-events: none; }
+  .reference-landing .hero-story-img { object-position: center bottom !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reference-landing .underline-stroke-back, .reference-landing .underline-stroke-front { animation: none; stroke-dashoffset: 0; }
+  .reference-landing a, .reference-landing a::after { transition: none; }
+}
+
+.reference-landing .hero-signature-heart { font-family: Arial, sans-serif; color: var(--gold); }

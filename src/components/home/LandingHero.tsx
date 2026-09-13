@@ -1,16 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 import { HeroHeadlineUnderline } from "./HeroHeadlineUnderline";
 
 export function LandingHero() {
   return (
     <section id="home" className="split-landing-hero" aria-labelledby="hero-title">
       <div className="split-hero-grid">
+        <svg className="hero-paper-desktop" viewBox="0 0 600 900" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 0H430C430 140 620 250 580 440S460 620 540 900H0Z" fill="var(--paper)" />
+          <path d="M420 0C420 140 610 250 570 440S450 620 530 900" fill="none" stroke="#eca90b" strokeWidth="2" />
+        </svg>
         {/* LEFT EDITORIAL CONTENT PANEL */}
         <div className="hero-editorial-panel">
           <div className="hero-editorial-content">
-            <span className="hero-eyebrow">STORIES · PRAYERS · PLAY</span>
+
 
             <h1 id="hero-title" className="split-hero-headline">
               <span>A little book</span>
@@ -26,9 +29,8 @@ export function LandingHero() {
             </p>
 
             <div className="hero-purchase-row">
-              <span className="hero-price-badge">Little Lambs • ₹100</span>
-              <Link href="/books" className="explore-books-cta">
-                GET YOUR COPY <span>→</span>
+              <Link href="#books" className="explore-books-cta">
+                Explore Books <span aria-hidden="true">→</span>
               </Link>
             </div>
 
@@ -36,8 +38,7 @@ export function LandingHero() {
               <div className="feature-badge-item">
                 <span className="feature-badge-icon" aria-hidden="true">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    <path d="M12 5v16M12 5C8 2 4 2 1 4v16c4-2 7-2 11 1 4-3 7-3 11-1V4c-3-2-7-2-11 1Z" />
                   </svg>
                 </span>
                 <span>Faith-Filled Stories</span>
@@ -53,9 +54,7 @@ export function LandingHero() {
               <div className="feature-badge-item">
                 <span className="feature-badge-icon" aria-hidden="true">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22a10 10 0 0 1-10-10c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10z" />
-                    <path d="M12 6v12" />
-                    <path d="M6 12h12" />
+                    <path d="M12 22V12M12 15C5 16 2 12 2 7c6 0 10 2 10 8ZM12 12C12 5 16 2 22 2c0 6-4 10-10 10Z" />
                   </svg>
                 </span>
                 <span>Fun Activities for Growing Minds</span>
@@ -63,42 +62,25 @@ export function LandingHero() {
             </div>
 
             <div className="hero-signature-wrap">
-              <span className="hero-signature-text">Small steps. A brighter tomorrow. 💛</span>
+              <span className="hero-signature-text">Small steps.<br />A brighter tomorrow. <span className="hero-signature-heart" aria-hidden="true">♥</span></span>
             </div>
           </div>
         </div>
 
-        {/* ORGANIC CURVED DIVIDER WITH GOLD ACCENT */}
-        <div className="hero-organic-divider-wrap" aria-hidden="true">
-          <svg
-            className="hero-wavy-edge-svg"
-            viewBox="0 0 100 900"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M98 0C38 150 88 320 28 480C-32 620 68 780 8 900"
-              stroke="#eca90b"
-              strokeWidth="4"
-              fill="none"
-              opacity="0.95"
-            />
-          </svg>
-        </div>
-
         {/* RIGHT ILLUSTRATED STORY SCENE PANEL */}
         <div className="hero-illustration-panel">
-          <div
-            className="hero-scene-wrap"
-            role="img"
-            aria-label="Jesus reading Little Lambs book with children beneath a leafy tree with a lamb and distant church"
-          >
+          <svg className="hero-paper-mobile" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 0H400C365 100 65 25 0 100Z" fill="var(--paper)" />
+            <path d="M0 91C65 16 365 91 400 0" fill="none" stroke="#eca90b" strokeWidth="1.5" />
+          </svg>
+          <div className="hero-scene-wrap">
             <Image
-              src="/illustrations/storybook-hero-scene.png"
+              src="/illustrations/storybook-hero-portrait.webp"
               alt="Jesus reading Little Lambs book with children beneath a leafy tree with a lamb and distant church"
               fill
-              priority
+              preload
               unoptimized
-              sizes="(max-width: 900px) 100vw, 56vw"
+              sizes="(max-width: 900px) 100vw, 65vw"
               className="hero-story-img"
             />
           </div>

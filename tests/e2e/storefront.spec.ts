@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Little Lambs Homepage Final Match & Refinement E2E Suite', () => {
-  test('Header sits above hero, renders headline, yellow SVG underline, Explore Books CTA (no hero price), and story illustration', async ({ page }) => {
+  test('Header integrates with hero, renders headline, yellow SVG underline, Explore Books CTA (no hero price), and story illustration', async ({ page }) => {
     await page.goto('/');
 
     // Header located above hero
@@ -20,11 +20,11 @@ test.describe('Little Lambs Homepage Final Match & Refinement E2E Suite', () => 
     // Explore Books CTA Button
     const ctaBtn = page.locator('.hero-purchase-row .explore-books-cta');
     await expect(ctaBtn).toBeVisible();
-    await expect(ctaBtn).toContainText('GET YOUR COPY');
+    await expect(ctaBtn).toContainText('Explore Books');
 
-    // Verify hero price badge is present
+    // Landing page leads to browsing, without a price badge
     const priceBadge = page.locator('.hero-price-badge');
-    await expect(priceBadge).toBeVisible();
+    await expect(priceBadge).toHaveCount(0);
 
     // Story Illustration Image verification (naturalWidth > 0 & visible)
     const storyImg = page.locator('.hero-story-img');
@@ -147,3 +147,19 @@ test.describe('Little Lambs Homepage Final Match & Refinement E2E Suite', () => 
     await expect(page.locator('.site-footer')).toBeVisible();
   });
 });
+
+for (const width of [320, 390, 768, 900, 1024, 1440]) {
+  test(`landing fits ${width}px and CTA reaches catalogue`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    const bounds = await page.locator('#hero-title').boundingBox();
+    expect(bounds).not.toBeNull();
+    const lastLine = await page.locator('#hero-title > span').last().evaluate(el => ({ width: el.scrollWidth, available: el.clientWidth }));
+    expect(lastLine.width).toBeLessThanOrEqual(lastLine.available + 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.locator('.hero-purchase-row a').click();
+    await expect(page).toHaveURL(/#books$/);
+    await expect(page.locator('#books')).toBeInViewport();
+  });
+}
