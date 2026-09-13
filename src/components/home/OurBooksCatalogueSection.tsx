@@ -5,7 +5,7 @@ import { ArrowRight } from "@/components/ui/Icons";
 
 export function OurBooksCatalogueSection() {
   return (
-    <section className="our-books-section" aria-labelledby="our-books-title">
+    <section id="books" className="our-books-section" aria-labelledby="our-books-title">
       <div className="our-books-container">
         {/* LEFT EDITORIAL COL */}
         <div className="our-books-left-col">

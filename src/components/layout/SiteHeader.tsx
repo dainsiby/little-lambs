@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ShoppingBagIcon, MenuIcon } from "@/components/ui/Icons";
 
-export function SiteHeader() {
+export function SiteHeader({ landing = false }: { landing?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -25,7 +25,7 @@ export function SiteHeader() {
     <header className="site-header">
       <Link href="/" className="brand-link" aria-label="Little Lambs home">
         <Image
-          src="/brand/logo.png"
+          src={landing ? "/brand/logo-clean.png" : "/brand/logo.png"}
           alt="Little Lambs — Made with Love"
           width={312}
           height={352}
@@ -50,6 +50,7 @@ export function SiteHeader() {
           aria-label="Main navigation"
           className={menuOpen ? "main-navigation is-open" : "main-navigation"}
         >
+          {landing && <Link href="/" aria-current={pathname === "/" ? "page" : undefined} onClick={() => setMenuOpen(false)}>Home</Link>}
           <Link
             href="/books"
             onClick={() => setMenuOpen(false)}
@@ -69,7 +70,7 @@ export function SiteHeader() {
             onClick={() => setMenuOpen(false)}
             aria-current={pathname === "/contact" ? "page" : undefined}
           >
-            FAQs
+            {landing ? "Contact" : "FAQs"}
           </Link>
           <Link
             href="/about"
@@ -82,11 +83,9 @@ export function SiteHeader() {
         <Link
           href="/cart"
           className="cart-pill-button"
-          aria-label="Shopping bag, 0 items"
+          aria-label={landing ? "Shopping cart" : "Shopping bag, 0 items"}
         >
-          <ShoppingBagIcon className="cart-pill-icon" />
-          <span>My bag</span>
-          <span className="cart-pill-count">0</span>
+          {landing ? <svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 4h4l4 18h16l4-13H7"/><path d="M10 22l-1 3h17"/><circle cx="12" cy="29" r="1.5"/><circle cx="25" cy="29" r="1.5"/></svg> : <><ShoppingBagIcon className="cart-pill-icon" /><span>My bag</span><span className="cart-pill-count">0</span></>}
         </Link>
       </div>
     </header>
