@@ -56,7 +56,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
             onClick={() => setMenuOpen(false)}
             aria-current={pathname.startsWith("/books") ? "page" : undefined}
           >
-            Books
+            {landing ? "Book" : "Books"}
           </Link>
           <Link
             href="/our-story"
@@ -72,13 +72,13 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
           >
             {landing ? "Contact" : "FAQs"}
           </Link>
-          <Link
+          {!landing && <Link
             href="/about"
             onClick={() => setMenuOpen(false)}
             aria-current={pathname === "/about" ? "page" : undefined}
           >
             About
-          </Link>
+          </Link>}
         </nav>
         <Link
           href="/cart"

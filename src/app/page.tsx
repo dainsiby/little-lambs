@@ -1,4 +1,5 @@
 import "./landing-reference.css";
+import { HomeMotion } from "@/components/home/HomeMotion";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { LandingHero } from "@/components/home/LandingHero";
 import { CuriousMindsSection } from "@/components/home/CuriousMindsSection";
@@ -10,6 +11,7 @@ import { Footer } from "@/components/layout/Footer";
 export default function Home() {
   return (
     <main id="main-content" className="site-canvas-outer">
+      <HomeMotion />
       <div className="site-canvas-frame">
         <div className="reference-landing">
           <SiteHeader landing />

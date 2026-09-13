@@ -163,3 +163,24 @@ for (const width of [320, 390, 768, 900, 1024, 1440]) {
     await expect(page.locator('#books')).toBeInViewport();
   });
 }
+
+test('reduced motion keeps content visible and stops decorative animation', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await expect(page.locator('#hero-title')).toBeVisible();
+  await page.locator('#books').scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').length)).toBe(0);
+  await expect(page.locator('.catalogue-card').first()).toBeVisible();
+});
+
+test('homepage remains readable and catalogue reachable without JavaScript', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
+  try {
+    const page = await context.newPage();
+    await page.goto('/');
+    await expect(page.locator('#hero-title')).toBeVisible();
+    await page.locator('.hero-purchase-row a').click();
+    await expect(page).toHaveURL(/#books$/);
+    await expect(page.locator('.catalogue-card').first()).toBeVisible();
+  } finally { await context.close(); }
+});
