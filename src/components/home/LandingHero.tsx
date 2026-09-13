@@ -69,6 +69,9 @@ export function LandingHero() {
 
         {/* RIGHT ILLUSTRATED STORY SCENE PANEL */}
         <div className="hero-illustration-panel">
+          <div className="hero-drifting-leaves" aria-hidden="true">
+            {[0, 1, 2].map(leaf => <svg key={leaf} className={`hero-leaf hero-leaf-${leaf}`} viewBox="0 0 32 48"><path d="M27 2C2 6-3 27 13 43 31 35 34 17 27 2Z" fill="currentColor" /><path d="M12 46 25 7" fill="none" stroke="#6b793c" strokeWidth="1.4" /></svg>)}
+          </div>
           <svg className="hero-paper-mobile" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true">
             <path d="M0 0H400C365 100 65 25 0 100Z" fill="var(--paper)" />
             <path d="M0 91C65 16 365 91 400 0" fill="none" stroke="#eca90b" strokeWidth="1.5" />
