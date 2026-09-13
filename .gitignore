@@ -1,37 +1,16 @@
-# dependencies
-/node_modules
-/.pnpm
-/.yarn
-
-# next.js build output
-/.next/
-/out/
-
-# production / local env files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env*.local
-
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# vercel
-.vercel
-
-# typescript
+node_modules/
+.next/
+out/
+build/
 *.tsbuildinfo
-next-env.d.ts
-
-# OS metadata
+.env*
+!.env.example
 .DS_Store
-Thumbs.db
+npm-debug.log*
 
-# Source PDFs & Brand PDF Assets
-*.pdf
-brand-assets/*.pdf
-
+# Temporary scratch & build artifacts
+scratch*
+*.zip
+*.v2
+test-results/
+playwright-report/

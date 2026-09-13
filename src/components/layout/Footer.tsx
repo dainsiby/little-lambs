@@ -1,91 +1,73 @@
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import TornPaperDivider from '@/components/ui/TornPaperDivider';
+import Image from "next/image";
+import Link from "next/link";
 
-export default function Footer() {
+export function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="mt-auto bg-brand-maroon text-brand-paper">
-      {/* Torn-Paper Top Divider */}
-      <TornPaperDivider position="top" bgClass="bg-brand-cream" />
-
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {/* Column 1: Brand Info */}
-          <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="relative h-10 w-10 overflow-hidden rounded-full border border-brand-paper/30 bg-brand-paper">
-                <Image
-                  src="/brand/logo.jpg"
-                  alt="Little Lambs Logo"
-                  fill
-                  sizes="40px"
-                  className="object-contain p-1"
-                />
-              </div>
-              <span className="font-heading text-2xl font-bold tracking-tight text-brand-paper">
-                Little Lambs
-              </span>
-            </div>
-            <p className="text-sm text-brand-paper/80 max-w-md">
-              A dedicated Christian children&apos;s book series creating wholesome activity books, Bible stories, prayers, colouring, and puzzles for little ones.
-            </p>
-            <p className="text-xs text-brand-paper/60">
-              An initiative by <strong className="text-brand-paper/90">SMYM Elanji Unit</strong>, published by <strong className="text-brand-paper/90">Pavanatma Publishers Pvt. Ltd. / Atma Books</strong>.
-            </p>
-          </div>
-
-          {/* Column 2: Navigation */}
-          <div>
-            <h3 className="font-heading text-lg font-bold text-brand-paper">Quick Links</h3>
-            <ul className="mt-3 space-y-2 text-sm text-brand-paper/80">
-              <li>
-                <Link href="/" className="focus-ring rounded hover:underline hover:text-brand-paper">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/books" className="focus-ring rounded hover:underline hover:text-brand-paper">
-                  Books Catalogue
-                </Link>
-              </li>
-              <li>
-                <Link href="/#our-story" className="focus-ring rounded hover:underline hover:text-brand-paper">
-                  Our Story — SMYM Elanji
-                </Link>
-              </li>
-              <li>
-                <Link href="/#about" className="focus-ring rounded hover:underline hover:text-brand-paper">
-                  About the Series
-                </Link>
-              </li>
-              <li>
-                <Link href="/#contact" className="focus-ring rounded hover:underline hover:text-brand-paper">
-                  Contact & Publisher Info
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Publisher & Factual Details */}
-          <div>
-            <h3 className="font-heading text-lg font-bold text-brand-paper">Publisher Info</h3>
-            <div className="mt-3 space-y-2 text-xs text-brand-paper/80">
-              <p className="font-semibold text-brand-paper">Pavanatma Publishers Pvt. Ltd. / Atma Books</p>
-              <p>English Christian Activity Book Series</p>
-              <p>Target Age Group: 4–10 Years</p>
-              <div className="pt-2 border-t border-brand-paper/15 text-[11px] text-brand-paper/60">
-                Official Bookstore Platform
-              </div>
-            </div>
-          </div>
+    <footer className="site-footer">
+      <div className="footer-main-row">
+        {/* LEFT BRAND & COPYRIGHT */}
+        <div className="footer-brand-col">
+          <Link href="/" aria-label="Little Lambs home">
+            <Image
+              src="/brand/logo.png"
+              alt="Little Lambs — Made with Love"
+              width={140}
+              height={150}
+              className="footer-logo"
+            />
+          </Link>
+          <p className="footer-copy-text">
+            &copy; {currentYear} Little Lambs. All rights reserved.
+          </p>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-10 border-t border-brand-paper/15 pt-6 text-center text-xs text-brand-paper/60">
-          <p>© {new Date().getFullYear()} Little Lambs. All rights reserved. Published by Pavanatma Publishers Pvt. Ltd.</p>
+        {/* CENTER NAVIGATION */}
+        <nav className="footer-nav-col" aria-label="Footer navigation">
+          <Link href="/books">Books</Link>
+          <Link href="/our-story">Our story</Link>
+          <Link href="/contact">FAQs</Link>
+          <Link href="/about">About</Link>
+        </nav>
+
+        {/* RIGHT SOCIAL PLACEHOLDERS & QUOTE */}
+        <div className="footer-right-col">
+          <div className="footer-social-placeholders" aria-hidden="true">
+            {/* Instagram Icon Placeholder */}
+            <span className="social-icon-box" title="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </span>
+            {/* Facebook Icon Placeholder */}
+            <span className="social-icon-box" title="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
+            </span>
+            {/* YouTube Icon Placeholder */}
+            <span className="social-icon-box" title="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+              </svg>
+            </span>
+          </div>
+
+          <p className="footer-script-quote">
+            Made with love <br />
+            for little hearts. ♡
+          </p>
         </div>
+      </div>
+
+      <div className="footer-credits-line">
+        <p>A project by SMYM Elanji Unit &nbsp;|&nbsp; Published by Atma Books, Kozhikode</p>
       </div>
     </footer>
   );
 }
+

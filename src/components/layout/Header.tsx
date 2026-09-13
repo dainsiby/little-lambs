@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
-import { Menu, X, BookOpen, User, LogOut, Shield } from 'lucide-react';
+import { Menu, X, BookOpen, User, LogOut, Shield, Search } from 'lucide-react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,70 +22,84 @@ export default function Header() {
   const isAdmin = userRole === 'ADMIN';
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-brand-maroon/10 bg-brand-cream/95 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-brand-maroon/10 bg-[#FAF6EE]/95 backdrop-blur-md transition-all">
       {/* Top Storefront Announcement Strip */}
-      <div className="bg-brand-maroon px-4 py-1.5 text-center text-xs font-medium text-brand-paper">
-        <span>Official Storefront — Direct from Publisher & SMYM Elanji Unit</span>
+      <div className="bg-brand-maroon px-4 py-1.5 text-center text-xs font-semibold tracking-wide text-brand-paper shadow-xs">
+        <span>Official Storefront — Direct from Publisher &amp; SMYM Elanji Unit</span>
       </div>
 
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        {/* Brand Logo & Name */}
-        <Link href="/" className="focus-ring flex items-center gap-3 rounded-lg">
-          <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-brand-maroon/20 bg-brand-paper shadow-sm">
+      <div className="mx-auto flex max-w-[1360px] items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        {/* Official Little Lambs Logo Emblem & Typography */}
+        <Link href="/" className="focus-ring group flex items-center gap-3 rounded-xl p-1" aria-label="Little Lambs Home">
+          <div className="relative h-12 sm:h-14 w-12 sm:w-14 shrink-0 transition-transform group-hover:scale-105">
             <Image
-              src="/brand/logo.jpg"
-              alt="Little Lambs Official Logo"
+              src="/brand/logo-clean.png"
+              alt="Little Lambs Logo Emblem"
               fill
-              sizes="48px"
-              className="object-contain p-1"
+              sizes="56px"
+              className="object-contain"
               priority
             />
           </div>
-          <div>
-            <span className="font-heading text-2xl font-bold tracking-tight text-brand-maroon">
+          <div className="flex flex-col">
+            <span className="font-heading text-xl sm:text-2xl font-extrabold tracking-tight text-brand-maroon leading-none">
               Little Lambs
             </span>
-            <span className="block text-[10px] font-semibold tracking-wider text-brand-slate uppercase">
+            <span className="text-[9px] sm:text-[10px] font-extrabold tracking-wider text-brand-maroon/80 uppercase mt-0.5">
               Christian Children&apos;s Books
             </span>
           </div>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="Main Navigation">
+        <nav className="hidden md:flex items-center gap-7" aria-label="Main Navigation">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className="focus-ring rounded-md text-sm font-semibold text-brand-maroon transition-colors hover:text-brand-maroon-dark"
+              className="focus-ring rounded-lg px-2.5 py-1 text-sm font-bold text-brand-maroon/90 transition-all hover:bg-brand-maroon/10 hover:text-brand-maroon"
             >
               {link.name}
             </Link>
           ))}
         </nav>
 
-        {/* CTA Buttons & User Session Menu */}
-        <div className="hidden md:flex items-center gap-4">
+        {/* Header Actions & Search Placeholder */}
+        <div className="hidden lg:flex items-center gap-3">
+          <div className="relative w-44 xl:w-52">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-slate/60" />
+            <input
+              type="text"
+              placeholder="Search books..."
+              disabled
+              className="w-full rounded-full border border-brand-maroon/15 bg-brand-paper/80 py-1.5 pl-8 pr-3 text-xs text-brand-slate cursor-not-allowed opacity-75 placeholder:text-brand-slate/50"
+              aria-label="Search books (disabled)"
+            />
+          </div>
+        </div>
+
+        {/* User Session Menu & Catalog Link */}
+        <div className="hidden md:flex items-center gap-3">
           <Link
             href="/books"
-            className="focus-ring inline-flex items-center gap-2 rounded-2xl bg-brand-maroon px-4 py-2 text-xs font-semibold text-brand-paper shadow-sm hover:bg-brand-maroon-dark transition-all"
+            className="focus-ring inline-flex items-center gap-2 rounded-full bg-brand-maroon px-4 py-2 text-xs font-extrabold text-brand-paper shadow-xs hover:bg-brand-maroon-dark transition-all hover:shadow-sm"
           >
-            <BookOpen className="h-4 w-4" />
-            <span>Browse Catalogue</span>
+            <BookOpen className="h-3.5 w-3.5" />
+            <span>Browse</span>
           </Link>
 
           {session ? (
-            <div className="flex items-center gap-3 border-l border-brand-maroon/15 pl-4">
+            <div className="flex items-center gap-3 border-l border-brand-maroon/15 pl-3">
               {isAdmin && (
                 <Link
                   href="/admin/dashboard"
-                  className="focus-ring inline-flex items-center gap-1.5 rounded-xl border border-brand-maroon/20 bg-brand-paper px-3 py-1.5 text-xs font-bold text-brand-maroon hover:bg-brand-maroon hover:text-brand-paper transition-all"
+                  className="focus-ring inline-flex items-center gap-1.5 rounded-full border border-brand-maroon/20 bg-brand-paper px-3 py-1.5 text-xs font-bold text-brand-maroon hover:bg-brand-maroon hover:text-brand-paper transition-all"
                 >
                   <Shield className="h-3.5 w-3.5" />
                   <span>Admin</span>
                 </Link>
               )}
-              <span className="text-xs font-semibold text-brand-maroon max-w-[120px] truncate">
+              <span className="text-xs font-bold text-brand-maroon max-w-[110px] truncate">
                 {session.user?.name || session.user?.email}
               </span>
               <button
@@ -100,7 +114,7 @@ export default function Header() {
           ) : (
             <Link
               href="/login"
-              className="focus-ring inline-flex items-center gap-1.5 text-xs font-bold text-brand-maroon hover:underline border-l border-brand-maroon/15 pl-4"
+              className="focus-ring inline-flex items-center gap-1.5 text-xs font-bold text-brand-maroon hover:underline border-l border-brand-maroon/15 pl-3"
             >
               <User className="h-4 w-4" />
               <span>Sign In</span>
@@ -112,7 +126,7 @@ export default function Header() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="focus-ring md:hidden p-2 rounded-lg text-brand-maroon hover:bg-brand-maroon/10"
+          className="focus-ring md:hidden p-2 rounded-xl text-brand-maroon hover:bg-brand-maroon/10 transition-colors"
           aria-expanded={mobileMenuOpen}
           aria-label="Toggle Navigation Menu"
         >
@@ -126,14 +140,14 @@ export default function Header() {
 
       {/* Mobile Slide-out Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-brand-maroon/10 bg-brand-paper px-4 pt-3 pb-6 shadow-lg">
-          <nav className="flex flex-col gap-3" aria-label="Mobile Navigation">
+        <div className="md:hidden border-t border-brand-maroon/10 bg-brand-paper px-4 pt-3 pb-6 shadow-md">
+          <nav className="flex flex-col gap-2" aria-label="Mobile Navigation">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="focus-ring rounded-lg px-3 py-2 text-base font-semibold text-brand-maroon hover:bg-brand-cream"
+                className="focus-ring rounded-lg px-3 py-2.5 text-base font-bold text-brand-maroon hover:bg-brand-cream/80"
               >
                 {link.name}
               </Link>
@@ -146,7 +160,7 @@ export default function Header() {
                     <Link
                       href="/admin/dashboard"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="focus-ring flex items-center justify-center gap-2 rounded-2xl bg-brand-maroon px-4 py-2.5 text-sm font-semibold text-brand-paper"
+                      className="focus-ring flex items-center justify-center gap-2 rounded-full bg-brand-maroon px-4 py-2.5 text-sm font-bold text-brand-paper"
                     >
                       <Shield className="h-4 w-4" />
                       <span>Admin Control Panel</span>
@@ -167,7 +181,7 @@ export default function Header() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="focus-ring flex items-center justify-center gap-2 rounded-2xl border border-brand-maroon px-4 py-2.5 text-sm font-semibold text-brand-maroon"
+                  className="focus-ring flex items-center justify-center gap-2 rounded-full border-2 border-brand-maroon px-4 py-2.5 text-sm font-bold text-brand-maroon hover:bg-brand-maroon hover:text-brand-paper transition-all"
                 >
                   <User className="h-4 w-4" />
                   <span>Sign In</span>

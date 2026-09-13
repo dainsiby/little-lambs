@@ -1,46 +1,46 @@
-import React from 'react';
-import type { Metadata } from 'next';
-import { getAllActiveBooks } from '@/lib/books';
-import BookCard from '@/components/books/BookCard';
-import Badge from '@/components/ui/Badge';
+import Metadata from "next";
+import { getAllBooks } from "@/lib/data/books";
+import { PageHero } from "@/components/layout/PageHero";
+import { Footer } from "@/components/layout/Footer";
+import { BookCard } from "@/components/books/BookCard";
 
-export const metadata: Metadata = {
-  title: 'Books Catalogue',
-  description:
-    'Browse the official Little Lambs Christian children\'s book catalogue. Discover activity books, Bible stories, prayers, and puzzles.',
+export const metadata = {
+  title: "Book Catalogue | Little Lambs Christian Activity Books",
+  description: "Browse the official Little Lambs Christian activity book series for children ages 4–10. Discover prayers, Bible stories, puzzles, and faith-building fun.",
 };
 
-export const revalidate = 60;
-
-export default async function BooksPage() {
-  const books = await getAllActiveBooks();
+export default function BooksPage() {
+  const books = getAllBooks();
 
   return (
-    <main className="min-h-screen bg-brand-cream py-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
-          <Badge variant="secondary">Official Catalogue</Badge>
-          <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-brand-maroon">
-            Little Lambs Book Series
-          </h1>
-          <p className="text-base text-brand-slate">
-            Explore our collection of wholesome Christian activity books designed to nurture faith, fun, and learning in young hearts.
-          </p>
-        </div>
+    <main id="main-content" className="site-canvas inner-canvas">
+      <div className="landing-hero inner-hero-container">
+        <PageHero
+          title="Our Book Catalogue"
+          subtitle="Inspiring faith, prayers, and play for growing hearts & minds."
+          badge="Christian Activity Series"
+        />
 
-        {/* Book Grid */}
-        {books.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <section className="catalog-section" aria-label="Book Catalogue">
+          <div className="catalog-grid">
             {books.map((book) => (
               <BookCard key={book.id} book={book} />
             ))}
+
+            {/* Future Architecture Placeholder Card */}
+            <article className="book-card coming-soon-card">
+              <div className="coming-soon-badge">Series Expansion</div>
+              <div className="coming-soon-icon">✨</div>
+              <h2 className="book-card-title">More Little Lambs Coming Soon</h2>
+              <p className="book-card-desc">
+                We are actively creating new Christian story &amp; activity books for young learners. Stay tuned for upcoming releases in the series!
+              </p>
+              <span className="coming-soon-pill">In Development</span>
+            </article>
           </div>
-        ) : (
-          <div className="text-center py-16 bg-brand-paper rounded-2xl border border-brand-maroon/10 p-8 max-w-md mx-auto">
-            <p className="text-brand-slate text-sm">No books currently listed in the catalogue.</p>
-          </div>
-        )}
+        </section>
+
+        <Footer />
       </div>
     </main>
   );

@@ -1,0 +1,46 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "overflow": false,
+    "heroHeight": 840,
+    "headingWidth": 581.359375,
+    "images": 0,
+    "consoleErrors": [],
+    "ctaDialog": "passed",
+    "mobileMenu": "not applicable"
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "overflow": false,
+    "heroHeight": 740,
+    "headingWidth": 521.15625,
+    "images": 0,
+    "consoleErrors": [],
+    "ctaDialog": "passed",
+    "mobileMenu": "not applicable"
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "overflow": false,
+    "heroHeight": 974.046875,
+    "headingWidth": 528,
+    "images": 0,
+    "consoleErrors": [],
+    "ctaDialog": "passed",
+    "mobileMenu": "not applicable"
+  },
+  {
+    "width": 375,
+    "height": 812,
+    "overflow": false,
+    "heroHeight": 785.953125,
+    "headingWidth": 297,
+    "images": 0,
+    "consoleErrors": [],
+    "ctaDialog": "passed",
+    "mobileMenu": "passed"
+  }
+]

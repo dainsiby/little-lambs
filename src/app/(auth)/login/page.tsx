@@ -1,36 +1,71 @@
-import React, { Suspense } from 'react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import LoginForm from '@/components/auth/LoginForm';
+"use client";
 
-export const metadata: Metadata = {
-  title: 'Sign In',
-  description: 'Log in to your Little Lambs Store account.',
-};
+import { PageHero } from "@/components/layout/PageHero";
+import { Footer } from "@/components/layout/Footer";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
-    <main className="flex min-h-[75vh] flex-col items-center justify-center p-6 bg-brand-cream">
-      <div className="w-full max-w-md space-y-6 rounded-3xl border border-brand-maroon/15 bg-brand-paper p-8 shadow-sm">
-        <div className="text-center space-y-2">
-          <h1 className="font-heading text-3xl font-extrabold text-brand-maroon">
-            Sign In
-          </h1>
-          <p className="text-xs text-brand-slate">
-            Welcome back to Little Lambs Bookstore
-          </p>
-        </div>
+    <main id="main-content" className="site-canvas inner-canvas">
+      <div className="landing-hero inner-hero-container">
+        <PageHero
+          title="Customer Sign In"
+          subtitle="Access your Little Lambs account to track orders and save details."
+          badge="Account Sign In"
+        />
 
-        <Suspense fallback={<div className="text-center text-xs">Loading...</div>}>
-          <LoginForm />
-        </Suspense>
+        <article className="auth-container">
+          <div className="auth-card">
+            <h2>Welcome Back</h2>
+            <p className="auth-subtitle">Sign in to your Little Lambs account</p>
 
-        <div className="text-center border-t border-brand-maroon/10 pt-4 text-xs text-brand-slate">
-          <span>Don&apos;t have an account yet? </span>
-          <Link href="/register" className="font-bold text-brand-maroon hover:underline">
-            Register here
-          </Link>
-        </div>
+            <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label htmlFor="login-email">Email Address</label>
+                <input
+                  type="email"
+                  id="login-email"
+                  name="email"
+                  placeholder="yourname@example.com"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <div className="label-with-link">
+                  <label htmlFor="login-password">Password</label>
+                  <span className="forgot-password-link">
+                    Forgot password? (Coming soon)
+                  </span>
+                </div>
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+
+              <button type="submit" className="primary-cta auth-submit-btn">
+                Sign In
+              </button>
+
+              <p className="auth-footer-text">
+                Don&apos;t have an account yet?{" "}
+                <Link href="/register" className="auth-link">
+                  Create an account
+                </Link>
+              </p>
+            </form>
+
+            <div className="auth-dev-notice">
+              <p>⚙️ <strong>Authentication Integration Notice:</strong> Auth.js customer authentication and session persistence will be activated in the upcoming backend phase.</p>
+            </div>
+          </div>
+        </article>
+
+        <Footer />
       </div>
     </main>
   );
