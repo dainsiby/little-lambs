@@ -1,0 +1,227 @@
+diff --git a/src/app/landing-reference.css b/src/app/landing-reference.css
+index 3282498..18d2578 100644
+--- a/src/app/landing-reference.css
++++ b/src/app/landing-reference.css
+@@ -2,7 +2,7 @@
+ .reference-landing { position: relative; --navy: #071d49; --paper: #fffdf7; }
+ .reference-landing .site-header { position: absolute; inset: 0 0 auto; background: transparent; border: 0; padding: 28px 3.5%; align-items: flex-start; }
+ .reference-landing .brand-link { width: clamp(110px, 12vw, 160px); }
+-.reference-landing .header-actions { margin-top: 18px; gap: 28px; padding: 12px 18px; border-radius: 40px; background: rgba(255,253,247,.83); box-shadow: 0 0 28px 16px rgba(255,253,247,.55); }
++.reference-landing .header-actions { margin-top: 18px; gap: 28px; padding: 12px 18px; position: relative; isolation: isolate; background: transparent; }
+ .reference-landing .main-navigation { font-size: 12px; text-transform: uppercase; gap: clamp(16px, 2.3vw, 34px); }
+ .reference-landing .cart-pill-button { border: 0; background: transparent; border-radius: 0; padding: 4px; min-width: 44px; min-height: 44px; justify-content: center; }
+ .reference-landing .split-hero-grid { display: block; min-height: 800px; height: max(800px, calc(100svh - 44px)); max-height: 1000px; }
+@@ -56,3 +56,75 @@
+ }
+ 
+ .reference-landing .hero-signature-heart { font-family: Arial, sans-serif; color: var(--gold); }
++
++/* Brief, one-time motion without layout shifts. */
++.hero-drifting-leaves { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
++.hero-leaf { position: absolute; width: 17px; height: 26px; opacity: 0; color: #c7b64f; }
++.hero-leaf-0 { left: 35%; top: 8%; }
++.hero-leaf-1 { left: 68%; top: 3%; color: #99a74a; }
++.hero-leaf-2 { left: 86%; top: 12%; color: #dfbb55; }
++@media (prefers-reduced-motion: no-preference) {
++  .reference-landing .split-hero-headline { animation: home-enter 600ms ease-out both; }
++  .reference-landing .split-hero-description { animation: home-enter 600ms 100ms ease-out both; }
++  .reference-landing .hero-purchase-row { animation: home-enter 600ms 180ms ease-out both; }
++  .reference-landing .explore-books-cta > span { transition: transform 180ms ease-out; }
++  .reference-landing .explore-books-cta:focus-visible > span { transform: translateX(4px); }
++  .reference-landing .explore-books-cta:active { transform: scale(.98); }
++  @media (hover: hover) and (pointer: fine) {
++    .reference-landing .explore-books-cta:hover > span { transform: translateX(4px); }
++  }
++  @media (min-width: 901px) {
++    .hero-leaf { animation: home-leaf-drift 4200ms ease-in-out both; }
++    .hero-leaf-1 { animation-delay: 250ms; }
++    .hero-leaf-2 { animation-delay: 500ms; }
++  }
++}
++@keyframes home-enter {
++  from { opacity: .3; transform: translateY(9px); }
++  to { opacity: 1; transform: translateY(0); }
++}
++@keyframes home-leaf-drift {
++  0% { opacity: 0; transform: translate(0, -12px) rotate(-20deg); }
++  18% { opacity: .7; }
++  65% { opacity: .6; transform: translate(22px, 65px) rotate(25deg); }
++  100% { opacity: 0; transform: translate(6px, 115px) rotate(65deg); }
++}
++@media (prefers-reduced-motion: reduce) {
++  .reference-landing .explore-books-cta:hover,
++  .reference-landing .explore-books-cta:active { transform: none; }
++}
++
++/* Soft light behind navigation, without a visible pill boundary. */
++@media (min-width: 901px) {
++  .reference-landing .header-actions::before {
++    content: ""; position: absolute; inset: -10px -20px; z-index: -1;
++    background: radial-gradient(ellipse, rgba(255,253,247,.96) 30%, rgba(255,253,247,.7) 58%, transparent 76%);
++    filter: blur(8px); pointer-events: none;
++  }
++  .reference-landing .main-navigation { gap: clamp(28px, 3vw, 44px); }
++  .reference-landing .main-navigation > a[aria-current="page"]::after { transform: scaleX(0); }
++  .reference-landing .main-navigation > a:hover::after { transform: scaleX(1); }
++}
++
++/* Coordinate the complete hero entrance, including its artwork and details. */
++@media (prefers-reduced-motion: no-preference) {
++  .reference-landing .hero-scene-wrap {
++    transform-origin: 55% 65%;
++    animation: hero-scene-settle 4800ms cubic-bezier(.2,.65,.3,1) both;
++  }
++  .reference-landing .feature-badge-item { animation: home-enter 650ms 280ms ease-out both; }
++  .reference-landing .feature-badge-item:nth-child(2) { animation-delay: 380ms; }
++  .reference-landing .feature-badge-item:nth-child(3) { animation-delay: 480ms; }
++  .reference-landing .hero-signature-wrap { animation: home-enter 750ms 550ms ease-out both; }
++  @media (max-width: 900px) {
++    .reference-landing .hero-scene-wrap { animation: hero-scene-mobile 2200ms ease-out both; }
++  }
++}
++@keyframes hero-scene-settle {
++  from { transform: scale(1.025); opacity: .85; }
++  to { transform: scale(1); opacity: 1; }
++}
++@keyframes hero-scene-mobile {
++  from { transform: scale(1.01); opacity: .9; }
++  to { transform: scale(1); opacity: 1; }
++}
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index f210285..0ad8ba2 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -1,4 +1,5 @@
+ import "./landing-reference.css";
++import { HomeMotion } from "@/components/home/HomeMotion";
+ import { SiteHeader } from "@/components/layout/SiteHeader";
+ import { LandingHero } from "@/components/home/LandingHero";
+ import { CuriousMindsSection } from "@/components/home/CuriousMindsSection";
+@@ -10,6 +11,7 @@ import { Footer } from "@/components/layout/Footer";
+ export default function Home() {
+   return (
+     <main id="main-content" className="site-canvas-outer">
++      <HomeMotion />
+       <div className="site-canvas-frame">
+         <div className="reference-landing">
+           <SiteHeader landing />
+diff --git a/src/components/home/HomeMotion.tsx b/src/components/home/HomeMotion.tsx
+new file mode 100644
+index 0000000..8cccda5
+--- /dev/null
++++ b/src/components/home/HomeMotion.tsx
+@@ -0,0 +1,42 @@
++"use client";
++
++import { useEffect } from "react";
++
++/** Progressive enhancement: content remains visible without JavaScript. */
++export function HomeMotion() {
++  useEffect(() => {
++    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
++    let observer: IntersectionObserver | undefined;
++    const animations = new Set<Animation>();
++    const seen = new WeakSet<Element>();
++    const stop = () => {
++      observer?.disconnect();
++      animations.forEach(animation => animation.cancel());
++      animations.clear();
++    };
++    const start = () => {
++      stop();
++      if (preference.matches || !("IntersectionObserver" in window)) return;
++      observer = new IntersectionObserver(entries => {
++        entries.forEach(({ target, isIntersecting }) => {
++          if (!isIntersecting || seen.has(target)) return;
++          seen.add(target);
++          observer?.unobserve(target);
++          // Never animate an element containing keyboard focus.
++          if (target.contains(document.activeElement)) return;
++          const animation = target.animate(
++            [{ opacity: 0.65, transform: "translateY(12px)" }, { opacity: 1, transform: "translateY(0)" }],
++            { duration: 480, easing: "cubic-bezier(.2,.7,.3,1)" },
++          );
++          animations.add(animation);
++          animation.finished.then(() => animations.delete(animation)).catch(() => {});
++        });
++      }, { threshold: 0.08 });
++      document.querySelectorAll("#main-content .activity-card, #main-content .story-teaser-card, #main-content .catalogue-card").forEach(el => observer?.observe(el));
++    };
++    start();
++    preference.addEventListener("change", start);
++    return () => { stop(); preference.removeEventListener("change", start); };
++  }, []);
++  return null;
++}
+diff --git a/src/components/home/LandingHero.tsx b/src/components/home/LandingHero.tsx
+index e9a8b7f..c7c125c 100644
+--- a/src/components/home/LandingHero.tsx
++++ b/src/components/home/LandingHero.tsx
+@@ -69,6 +69,9 @@ export function LandingHero() {
+ 
+         {/* RIGHT ILLUSTRATED STORY SCENE PANEL */}
+         <div className="hero-illustration-panel">
++          <div className="hero-drifting-leaves" aria-hidden="true">
++            {[0, 1, 2].map(leaf => <svg key={leaf} className={`hero-leaf hero-leaf-${leaf}`} viewBox="0 0 32 48"><path d="M27 2C2 6-3 27 13 43 31 35 34 17 27 2Z" fill="currentColor" /><path d="M12 46 25 7" fill="none" stroke="#6b793c" strokeWidth="1.4" /></svg>)}
++          </div>
+           <svg className="hero-paper-mobile" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true">
+             <path d="M0 0H400C365 100 65 25 0 100Z" fill="var(--paper)" />
+             <path d="M0 91C65 16 365 91 400 0" fill="none" stroke="#eca90b" strokeWidth="1.5" />
+diff --git a/src/components/layout/SiteHeader.tsx b/src/components/layout/SiteHeader.tsx
+index 7813d97..e640552 100644
+--- a/src/components/layout/SiteHeader.tsx
++++ b/src/components/layout/SiteHeader.tsx
+@@ -56,7 +56,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
+             onClick={() => setMenuOpen(false)}
+             aria-current={pathname.startsWith("/books") ? "page" : undefined}
+           >
+-            Books
++            {landing ? "Book" : "Books"}
+           </Link>
+           <Link
+             href="/our-story"
+@@ -72,13 +72,13 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
+           >
+             {landing ? "Contact" : "FAQs"}
+           </Link>
+-          <Link
++          {!landing && <Link
+             href="/about"
+             onClick={() => setMenuOpen(false)}
+             aria-current={pathname === "/about" ? "page" : undefined}
+           >
+             About
+-          </Link>
++          </Link>}
+         </nav>
+         <Link
+           href="/cart"
+diff --git a/tests/e2e/storefront.spec.ts b/tests/e2e/storefront.spec.ts
+index 195c24b..b61b7aa 100644
+--- a/tests/e2e/storefront.spec.ts
++++ b/tests/e2e/storefront.spec.ts
+@@ -163,3 +163,24 @@ for (const width of [320, 390, 768, 900, 1024, 1440]) {
+     await expect(page.locator('#books')).toBeInViewport();
+   });
+ }
++
++test('reduced motion keeps content visible and stops decorative animation', async ({ page }) => {
++  await page.emulateMedia({ reducedMotion: 'reduce' });
++  await page.goto('/');
++  await expect(page.locator('#hero-title')).toBeVisible();
++  await page.locator('#books').scrollIntoViewIfNeeded();
++  expect(await page.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').length)).toBe(0);
++  await expect(page.locator('.catalogue-card').first()).toBeVisible();
++});
++
++test('homepage remains readable and catalogue reachable without JavaScript', async ({ browser, baseURL }) => {
++  const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
++  try {
++    const page = await context.newPage();
++    await page.goto('/');
++    await expect(page.locator('#hero-title')).toBeVisible();
++    await page.locator('.hero-purchase-row a').click();
++    await expect(page).toHaveURL(/#books$/);
++    await expect(page.locator('.catalogue-card').first()).toBeVisible();
++  } finally { await context.close(); }
++});
