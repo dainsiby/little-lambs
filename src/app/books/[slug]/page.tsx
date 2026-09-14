@@ -1,3 +1,4 @@
+import { CoverPreview } from "@/components/books/CoverPreview";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -63,16 +64,17 @@ export default async function BookDetailPage({ params }: BookPageProps) {
                   className="detail-cover-img"
                 />
               </div>
+              <CoverPreview src={primaryImage} title={book.title} />
             </div>
 
             {/* Info & Purchase Column */}
             <div className="book-detail-content">
               <div className="book-detail-header">
-                <h1 className="detail-title">{book.title}</h1>
+                <h2 className="detail-title">Made for little moments of discovery.</h2>
                 {book.subtitle && <p className="detail-subtitle">{book.subtitle}</p>}
                 <div className="detail-price-box">
                   <span className="detail-price">{book.currency}{book.price}</span>
-                  <span className="detail-availability-badge">In Stock</span>
+                  <span className="detail-availability-badge">First edition · {book.language}</span>
                 </div>
               </div>
 
@@ -112,33 +114,16 @@ export default async function BookDetailPage({ params }: BookPageProps) {
                 </div>
               </div>
 
-              {/* Purchase Action Buttons (Upcoming storefront integration notice) */}
               <div className="detail-actions">
-                <button
-                  type="button"
-                  className="primary-cta detail-cta-btn"
-                  disabled
-                  title="Online purchasing will open soon!"
-                >
-                  Add to Cart (Coming Soon)
-                </button>
-                <button
-                  type="button"
-                  className="secondary-cta detail-cta-btn"
-                  disabled
-                  title="Online purchasing will open soon!"
-                >
-                  Buy Now (₹100)
-                </button>
+                <Link href="/contact" className="primary-cta">Enquire about this book <ArrowRight /></Link>
+                <Link href="/books" className="secondary-cta">Back to books</Link>
               </div>
-              <p className="purchase-notice">
-                * Online ordering and checkout integration is currently under final preparation. For wholesale or direct enquiries, please visit our <Link href="/contact" className="contact-link-inline">Contact Page</Link>.
-              </p>
+              <p className="purchase-notice">Online ordering is not available yet. Contact us about individual copies or books for your parish.</p>
             </div>
           </div>
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

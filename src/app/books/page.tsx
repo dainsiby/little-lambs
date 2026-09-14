@@ -1,4 +1,4 @@
-import Metadata from "next";
+import { Sparkles } from "lucide-react";
 import { getAllBooks } from "@/lib/data/books";
 import { PageHero } from "@/components/layout/PageHero";
 import { Footer } from "@/components/layout/Footer";
@@ -16,7 +16,7 @@ export default function BooksPage() {
     <main id="main-content" className="site-canvas inner-canvas">
       <div className="landing-hero inner-hero-container">
         <PageHero
-          title="Our Book Catalogue"
+          title="A little shelf. A world of discovery."
           subtitle="Inspiring faith, prayers, and play for growing hearts & minds."
           badge="Christian Activity Series"
         />
@@ -30,17 +30,17 @@ export default function BooksPage() {
             {/* Future Architecture Placeholder Card */}
             <article className="book-card coming-soon-card">
               <div className="coming-soon-badge">Series Expansion</div>
-              <div className="coming-soon-icon">✨</div>
+              <div className="coming-soon-icon"><Sparkles size={24} aria-hidden="true" /></div>
               <h2 className="book-card-title">More Little Lambs Coming Soon</h2>
               <p className="book-card-desc">
-                We are actively creating new Christian story &amp; activity books for young learners. Stay tuned for upcoming releases in the series!
+                Our story begins with one activity book. More titles will join the Little Lambs family.
               </p>
-              <span className="coming-soon-pill">In Development</span>
+              <span className="coming-soon-pill">More to come</span>
             </article>
           </div>
         </section>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

@@ -64,7 +64,7 @@ export default function RegisterPage() {
                 />
               </div>
 
-              <button type="submit" className="primary-cta auth-submit-btn">
+              <button disabled type="submit" className="primary-cta auth-submit-btn">
                 Create Account
               </button>
 
@@ -76,13 +76,11 @@ export default function RegisterPage() {
               </p>
             </form>
 
-            <div className="auth-dev-notice">
-              <p>⚙️ <strong>Account Registration Notice:</strong> Customer account creation and password security will be enabled in the upcoming backend integration phase.</p>
-            </div>
+            <div className="auth-dev-notice"><p>Customer accounts are not available yet. <Link href="/contact">Contact us</Link> for help with a book enquiry.</p></div>
           </div>
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

@@ -1,3 +1,4 @@
+import { ShoppingBag } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
@@ -21,7 +22,7 @@ export default function CartPage() {
         <article className="cart-container">
           {/* Polished Empty Cart Shell State */}
           <div className="empty-cart-card">
-            <div className="empty-cart-icon">🛒</div>
+            <div className="empty-cart-icon"><ShoppingBag size={24} aria-hidden="true" /></div>
             <h2>Your Shopping Cart is Empty</h2>
             <p>
               Explore our Christian activity books for children ages 4 to 10 and add them to your cart.
@@ -33,19 +34,10 @@ export default function CartPage() {
             </div>
           </div>
 
-          {/* Reusable Cart Summary Shell (Disabled until backend integration) */}
-          <div className="cart-shell-preview">
-            <div className="cart-notice-box">
-              <span className="notice-icon">⚙️</span>
-              <div className="notice-content">
-                <strong>Storefront Cart Integration</strong>
-                <p>Cart state management and persistent checkout will be enabled in the upcoming release phase.</p>
-              </div>
-            </div>
-          </div>
+          <div className="cart-notice-box"><strong>Looking for a copy?</strong><p>Online ordering is not available yet. <Link href="/contact" className="contact-link-inline">Contact the publisher</Link> to enquire about books.</p></div>
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

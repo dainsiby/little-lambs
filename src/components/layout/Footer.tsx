@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export function Footer() {
+export function Footer({ inner = false }: { inner?: boolean }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -27,7 +27,7 @@ export function Footer() {
         <nav className="footer-nav-col" aria-label="Footer navigation">
           <Link href="/books">Books</Link>
           <Link href="/our-story">Our story</Link>
-          <Link href="/contact">FAQs</Link>
+          <Link href="/contact">{inner ? "Contact" : "FAQs"}</Link>
           <Link href="/about">About</Link>
         </nav>
 

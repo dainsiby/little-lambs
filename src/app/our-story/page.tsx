@@ -1,3 +1,5 @@
+import { Cross, Palette, BookOpen } from "lucide-react";
+import Image from "next/image";
 import { PageHero } from "@/components/layout/PageHero";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
@@ -19,7 +21,9 @@ export default function OurStoryPage() {
         />
 
         <article className="story-content-wrap">
-          <section className="editorial-card">
+          <div className="story-intro">
+<Image src="/illustrations/storybook-hero-scene.png" alt="Jesus sharing a book with children" width={1024} height={576} />
+<section className="editorial-card">
             <h2>A Little Book for Growing Hearts</h2>
             <p>
               <strong>Little Lambs</strong> began with a simple yet profound goal: to create a warm, engaging, and faith-filled learning companion for children as they grow in their early Christian journey.
@@ -29,19 +33,20 @@ export default function OurStoryPage() {
             </p>
           </section>
 
+          </div>
           <section className="editorial-grid">
             <div className="story-box">
-              <span className="story-icon">✝️</span>
+              <span className="story-icon"><Cross size={24} aria-hidden="true" /></span>
               <h3>Faith-Centered Content</h3>
               <p>Every page introduces children to fundamental daily prayers, scripture stories, and moral reflection tailored to young minds.</p>
             </div>
             <div className="story-box">
-              <span className="story-icon">🎨</span>
+              <span className="story-icon"><Palette size={24} aria-hidden="true" /></span>
               <h3>Playful Activities</h3>
               <p>From word searches and mazes to coloring and drawing, learning about faith becomes a joyful and interactive adventure.</p>
             </div>
             <div className="story-box">
-              <span className="story-icon">📖</span>
+              <span className="story-icon"><BookOpen size={24} aria-hidden="true" /></span>
               <h3>Growing Book Series</h3>
               <p>Starting with our flagship English Christian Activity Book, Little Lambs is expanding into a full series of activity and storybooks.</p>
             </div>
@@ -60,7 +65,7 @@ export default function OurStoryPage() {
           </section>
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

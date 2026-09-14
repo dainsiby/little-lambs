@@ -1,3 +1,4 @@
+import "./inner-pages.css";
 import React from "react";
 import { SiteHeader } from "./SiteHeader";
 

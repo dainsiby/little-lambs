@@ -47,7 +47,7 @@ export default function LoginPage() {
                 />
               </div>
 
-              <button type="submit" className="primary-cta auth-submit-btn">
+              <button disabled type="submit" className="primary-cta auth-submit-btn">
                 Sign In
               </button>
 
@@ -59,13 +59,11 @@ export default function LoginPage() {
               </p>
             </form>
 
-            <div className="auth-dev-notice">
-              <p>⚙️ <strong>Authentication Integration Notice:</strong> Auth.js customer authentication and session persistence will be activated in the upcoming backend phase.</p>
-            </div>
+            <div className="auth-dev-notice"><p>Customer accounts are not available yet. <Link href="/contact">Contact us</Link> for help with a book enquiry.</p></div>
           </div>
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );
