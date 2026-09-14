@@ -20,7 +20,7 @@ export function BookCard({ book }: BookCardProps) {
           height={480}
           className="book-card-image"
         />
-        <span className="book-card-badge">{book.status === 'ACTIVE' ? 'Available Now' : book.status}</span>
+        <span className="book-card-badge">{book.status === 'ACTIVE' ? 'Book 01' : book.status}</span>
       </div>
       <div className="book-card-body">
         <div className="book-card-meta">

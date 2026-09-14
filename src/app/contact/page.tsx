@@ -1,9 +1,14 @@
 "use client";
 
+import { MapPin, Sparkles, Mail } from "lucide-react";
+
+
+import { useState } from "react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Footer } from "@/components/layout/Footer";
 
 export default function ContactPage() {
+  const [draft, setDraft] = useState("");
   return (
     <main id="main-content" className="site-canvas inner-canvas">
       <div className="landing-hero inner-hero-container">
@@ -22,7 +27,7 @@ export default function ContactPage() {
 
               <div className="contact-detail-group">
                 <div className="contact-detail-item">
-                  <span className="contact-icon">📍</span>
+                  <span className="contact-icon"><MapPin size={24} aria-hidden="true" /></span>
                   <div>
                     <strong>Publisher:</strong>
                     <p>Atma Books</p>
@@ -30,7 +35,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="contact-detail-item">
-                  <span className="contact-icon">✨</span>
+                  <span className="contact-icon"><Sparkles size={24} aria-hidden="true" /></span>
                   <div>
                     <strong>Creator:</strong>
                     <p>SMYM Elanji Unit</p>
@@ -38,27 +43,27 @@ export default function ContactPage() {
                 </div>
 
                 <div className="contact-detail-item">
-                  <span className="contact-icon">✉️</span>
+                  <span className="contact-icon"><Mail size={24} aria-hidden="true" /></span>
                   <div>
                     <strong>Official Email:</strong>
                     <p><a href="mailto:atmabooks@gmail.com" className="contact-email-link">atmabooks@gmail.com</a></p>
                   </div>
                 </div>
 
-                <div className="contact-detail-item pending-box">
-                  <span className="contact-icon">⚙️</span>
-                  <div>
-                    <strong>Direct Store Support:</strong>
-                    <p className="pending-text">Pending store configuration</p>
-                  </div>
-                </div>
+
               </div>
             </div>
 
             {/* Accessible Contact Form */}
             <div className="contact-form-card">
               <h2>Send a Message</h2>
-              <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+              <form className="contact-form" onSubmit={(e) => {
+                e.preventDefault();
+                const form = new FormData(e.currentTarget);
+                const subject = String(form.get("subject") || "Little Lambs enquiry");
+                const body = `${form.get("message")}\n\nFrom: ${form.get("name")}\nReply to: ${form.get("email")}`;
+                setDraft(`mailto:atmabooks@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+              }}>
                 <div className="form-group">
                   <label htmlFor="contact-name">Your Full Name</label>
                   <input
@@ -104,17 +109,24 @@ export default function ContactPage() {
                 </div>
 
                 <button type="submit" className="primary-cta contact-submit-btn">
-                  Send Message
+                  Prepare email
                 </button>
                 <p className="form-note">
-                  * Note: Message processing integration will be enabled in the upcoming storefront release.
+                  Prepare your message, then open it in your email app to review and send.
                 </p>
+                {draft && <div role="status"><p>Your draft is ready. Nothing has been sent.</p><a className="secondary-cta" href={draft}>Open email draft</a></div>}
               </form>
             </div>
           </div>
         </article>
 
-        <Footer />
+        <section className="contact-container store-faq" aria-labelledby="enquiry-faq-title">
+          <h2 id="enquiry-faq-title">A few helpful answers</h2>
+          <details><summary>Who is the book for?</summary><p>Children aged 4–10, with grown-up guidance for younger readers.</p></details>
+          <details><summary>Can I enquire about copies for a parish?</summary><p>Yes. Include your quantity and location in your message to the publisher.</p></details>
+          <details><summary>Can I pay online?</summary><p>Online ordering is not available yet. Please enquire before making any payment.</p></details>
+        </section>
+        <Footer inner />
       </div>
     </main>
   );

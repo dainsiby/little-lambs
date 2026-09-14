@@ -74,7 +74,7 @@ export default function AboutPage() {
           </section>
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

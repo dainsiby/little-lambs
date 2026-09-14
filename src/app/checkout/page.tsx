@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
@@ -15,7 +16,7 @@ export default function CheckoutPage() {
         <PageHero
           title="Checkout"
           subtitle="Complete your delivery address and payment details."
-          badge="Storefront Order Shell"
+          badge="Ordering information"
         />
 
         <article className="checkout-container">
@@ -77,17 +78,17 @@ export default function CheckoutPage() {
               </div>
 
               <div className="checkout-integration-notice">
-                <span className="notice-icon">⚙️</span>
+                <span className="notice-icon"><Info size={24} aria-hidden="true" /></span>
                 <div className="notice-content">
-                  <strong>Checkout Disabled in Storefront Shell</strong>
-                  <p>Checkout, order creation, and UPI payment verification will be fully activated in the upcoming backend integration phase.</p>
+                  <strong>Online ordering is not available yet</strong>
+                  <p>Please contact the publisher about availability and ordering. No payment is collected on this page.</p>
                 </div>
               </div>
             </div>
           </div>
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

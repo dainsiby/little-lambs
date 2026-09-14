@@ -1,3 +1,4 @@
+import { UserRound, ClipboardList, House, LockKeyhole } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
@@ -21,7 +22,7 @@ export default function AccountPage() {
         <article className="account-container">
           {/* Guest State Banner */}
           <div className="account-guest-banner">
-            <div className="guest-banner-icon">👤</div>
+            <div className="guest-banner-icon"><UserRound size={24} aria-hidden="true" /></div>
             <div className="guest-banner-content">
               <h2>Sign in to view your account</h2>
               <p>Please log in or register a new customer account to access saved details and order tracking.</p>
@@ -39,21 +40,21 @@ export default function AccountPage() {
           {/* Placeholders for Future Account Sections */}
           <div className="account-placeholders-grid">
             <div className="account-placeholder-card">
-              <span className="placeholder-icon">📋</span>
+              <span className="placeholder-icon"><ClipboardList size={24} aria-hidden="true" /></span>
               <h3>Order History</h3>
               <p>View past orders, receipt details, and delivery tracking status.</p>
               <span className="placeholder-tag">Requires Sign In</span>
             </div>
 
             <div className="account-placeholder-card">
-              <span className="placeholder-icon">🏡</span>
+              <span className="placeholder-icon"><House size={24} aria-hidden="true" /></span>
               <h3>Delivery Addresses</h3>
               <p>Save shipping addresses for faster future order checkout.</p>
               <span className="placeholder-tag">Requires Sign In</span>
             </div>
 
             <div className="account-placeholder-card">
-              <span className="placeholder-icon">🔒</span>
+              <span className="placeholder-icon"><LockKeyhole size={24} aria-hidden="true" /></span>
               <h3>Account Security</h3>
               <p>Update your email address, full name, and login password.</p>
               <span className="placeholder-tag">Requires Sign In</span>
@@ -61,7 +62,7 @@ export default function AccountPage() {
           </div>
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

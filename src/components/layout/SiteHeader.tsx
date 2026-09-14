@@ -70,7 +70,7 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
             onClick={() => setMenuOpen(false)}
             aria-current={pathname === "/contact" ? "page" : undefined}
           >
-            {landing ? "Contact" : "FAQs"}
+            Contact
           </Link>
           {!landing && <Link
             href="/about"
