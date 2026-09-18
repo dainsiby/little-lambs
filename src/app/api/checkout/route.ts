@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth';
+import { auth } from '@/auth';
 import { createOrder } from '@/lib/orders/orderService';
 import { validateSameOrigin } from '@/lib/security/csrf';
 import { checkRateLimit } from '@/lib/security/rateLimit';

@@ -46,7 +46,7 @@ export default async function AdminBooksListPage() {
                   </p>
                 </td>
                 <td className="p-4 font-mono font-bold text-brand-maroon">
-                  ₹{Number(book.price).toFixed(2)}
+                  ₹{(book.pricePaise / 100).toFixed(2)}
                 </td>
                 <td className="p-4 font-mono">
                   <span className={`px-2 py-0.5 rounded text-xs font-bold ${

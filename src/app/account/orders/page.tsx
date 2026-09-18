@@ -1,15 +1,24 @@
-import { auth } from "@/lib/auth/auth";
-import { redirect } from "next/navigation";
-import { getCustomerOrders } from "@/lib/orders/orderService";
-import { PageHero } from "@/components/layout/PageHero";
-import { Footer } from "@/components/layout/Footer";
-import Link from "next/link";
+import React from 'react';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { getCustomerOrders } from '@/lib/orders/orderService';
+import { PageHero } from '@/components/layout/PageHero';
+import { Footer } from '@/components/layout/Footer';
+import InnerHeader from '@/components/layout/InnerHeader';
+import Link from 'next/link';
+
+export const metadata = {
+  title: 'My Orders | Little Lambs Store',
+  description: 'View and track your Little Lambs purchase history.',
+};
+
+export const revalidate = 0; // Dynamic server rendering for live order history
 
 export default async function CustomerOrderHistoryPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/login?callbackUrl=/account/orders");
+    redirect('/login?callbackUrl=/account/orders');
   }
 
   const orders = await getCustomerOrders(session.user.id);
@@ -23,110 +32,77 @@ export default async function CustomerOrderHistoryPage() {
           badge="Order History"
         />
 
-        <article className="account-container" style={{ maxWidth: "900px", margin: "0 auto 3rem", padding: "0 1rem" }}>
-          <div className="account-card" style={{ background: "#FFFFFF", padding: "1.5rem", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
-              <h2 style={{ color: "#1B2A4A", margin: 0 }}>Order History</h2>
-              <Link href="/account" style={{ color: "#8B263E", textDecoration: "none", fontWeight: 600 }}>
-                &larr; Back to Account Profile
+        <article className="account-container max-w-4xl mx-auto pb-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-[#092e4c] m-0">Order History</h2>
+            <Link href="/account" className="text-xs font-bold text-[#74291e] hover:underline">
+              &larr; Back to Account Profile
+            </Link>
+          </div>
+
+          {orders.length === 0 ? (
+            <div className="empty-cart-card text-center py-12">
+              <p className="text-slate-600 mb-4">You haven&apos;t placed any orders yet.</p>
+              <Link href="/books" className="primary-cta font-bold text-xs py-2.5 px-5">
+                Explore Books &rarr;
               </Link>
             </div>
-
-            {orders.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "2rem", color: "#718096" }}>
-                <p>You haven&apos;t placed any orders yet.</p>
-                <Link href="/books" className="primary-cta" style={{ display: "inline-block", marginTop: "1rem", textDecoration: "none" }}>
-                  Explore Books
-                </Link>
-              </div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                {orders.map((order) => (
-                  <div
-                    key={order.id}
-                    style={{
-                      border: "1px solid #E2E8F0",
-                      borderRadius: "8px",
-                      padding: "1.25rem",
-                      background: "#FFFDF9",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      gap: "1rem",
-                    }}
-                  >
-                    <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.25rem" }}>
-                        <strong style={{ color: "#1B2A4A", fontSize: "1.1rem" }}>{order.orderNumber}</strong>
-                        <span
-                          style={{
-                            fontSize: "0.75rem",
-                            fontWeight: 700,
-                            padding: "0.25rem 0.5rem",
-                            borderRadius: "4px",
-                            background:
-                              order.paymentStatus === "PAID"
-                                ? "#C6F6D5"
-                                : order.paymentStatus === "VERIFICATION_PENDING"
-                                ? "#FEFCBF"
-                                : "#FED7D7",
-                            color:
-                              order.paymentStatus === "PAID"
-                                ? "#22543D"
-                                : order.paymentStatus === "VERIFICATION_PENDING"
-                                ? "#744210"
-                                : "#742A2A",
-                          }}
-                        >
-                          Payment: {order.paymentStatus.replace("_", " ")}
-                        </span>
-                        <span
-                          style={{
-                            fontSize: "0.75rem",
-                            fontWeight: 700,
-                            padding: "0.25rem 0.5rem",
-                            borderRadius: "4px",
-                            background: "#E2E8F0",
-                            color: "#2D3748",
-                          }}
-                        >
-                          Fulfilment: {order.fulfilmentStatus.replace("_", " ")}
-                        </span>
-                      </div>
-                      <p style={{ margin: 0, color: "#718096", fontSize: "0.85rem" }}>
-                        Placed on {new Date(order.placedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })} • {order.items.length} {order.items.length === 1 ? "item" : "items"}
-                      </p>
+          ) : (
+            <div className="space-y-4">
+              {orders.map((order) => (
+                <div
+                  key={order.id}
+                  className="order-card p-6 bg-[#fffefa] border border-[#e2ddcf] rounded-2xl flex flex-wrap justify-between items-center gap-4"
+                >
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className="font-extrabold text-base text-[#092e4c]">
+                        Order #{order.orderNumber}
+                      </span>
+                      <span className="text-xs text-slate-500 font-mono">
+                        {new Date(order.placedAt).toLocaleDateString('en-IN', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </span>
                     </div>
 
-                    <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-                      <strong style={{ fontSize: "1.15rem", color: "#8B263E" }}>
+                    <p className="text-xs text-slate-600 m-0">
+                      {order.items.length} {order.items.length === 1 ? 'item' : 'items'} &middot; Total:{' '}
+                      <strong className="font-mono text-[#74291e]">
                         ₹{(order.totalPaise / 100).toFixed(2)}
                       </strong>
-
-                      <Link
-                        href={`/account/orders/${order.orderNumber}`}
-                        style={{
-                          background: "#8B263E",
-                          color: "#FFFFFF",
-                          padding: "0.5rem 1rem",
-                          borderRadius: "6px",
-                          textDecoration: "none",
-                          fontWeight: 600,
-                          fontSize: "0.9rem",
-                        }}
-                      >
-                        View Order Details
-                      </Link>
-                    </div>
+                    </p>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`status-badge ${
+                        order.paymentStatus === 'PAID'
+                          ? 'paid'
+                          : order.paymentStatus === 'VERIFICATION_PENDING'
+                          ? 'pending'
+                          : 'rejected'
+                      }`}
+                    >
+                      {order.paymentStatus.replace('_', ' ')}
+                    </span>
+
+                    <Link
+                      href={`/account/orders/${order.orderNumber}`}
+                      className="secondary-cta text-xs font-bold py-2 px-4 rounded-full"
+                    >
+                      View Details &rarr;
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </article>
 
-        <Footer />
+        <Footer inner />
       </div>
     </main>
   );

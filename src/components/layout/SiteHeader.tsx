@@ -8,6 +8,7 @@ import { ShoppingBagIcon, MenuIcon } from "@/components/ui/Icons";
 
 export function SiteHeader({ landing = false }: { landing?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -20,6 +21,29 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [menuOpen]);
+
+  // Fetch cart count ONLY for inner pages (landing=false)
+  useEffect(() => {
+    if (landing) return;
+
+    const fetchCartCount = async () => {
+      try {
+        const res = await fetch("/api/cart");
+        if (res.ok) {
+          const data = await res.json();
+          setCartCount(data.totalQuantity || 0);
+        }
+      } catch {
+        // Silently fallback to 0 on network/auth error
+      }
+    };
+
+    fetchCartCount();
+
+    const handleCartUpdated = () => fetchCartCount();
+    window.addEventListener("cart-updated", handleCartUpdated);
+    return () => window.removeEventListener("cart-updated", handleCartUpdated);
+  }, [landing, pathname]);
 
   return (
     <header className="site-header">
@@ -50,7 +74,9 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
           aria-label="Main navigation"
           className={menuOpen ? "main-navigation is-open" : "main-navigation"}
         >
-          {landing && <Link href="/" aria-current={pathname === "/" ? "page" : undefined} onClick={() => setMenuOpen(false)}>Home</Link>}
+          <Link href="/" aria-current={pathname === "/" ? "page" : undefined} onClick={() => setMenuOpen(false)}>
+            Home
+          </Link>
           <Link
             href="/books"
             onClick={() => setMenuOpen(false)}
@@ -63,7 +89,14 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
             onClick={() => setMenuOpen(false)}
             aria-current={pathname === "/our-story" ? "page" : undefined}
           >
-            Our story
+            Our Story
+          </Link>
+          <Link
+            href="/about"
+            onClick={() => setMenuOpen(false)}
+            aria-current={pathname === "/about" ? "page" : undefined}
+          >
+            About
           </Link>
           <Link
             href="/contact"
@@ -72,20 +105,30 @@ export function SiteHeader({ landing = false }: { landing?: boolean }) {
           >
             Contact
           </Link>
-          {!landing && <Link
-            href="/about"
-            onClick={() => setMenuOpen(false)}
-            aria-current={pathname === "/about" ? "page" : undefined}
-          >
-            About
-          </Link>}
+          {!landing && (
+            <Link
+              href="/account"
+              onClick={() => setMenuOpen(false)}
+              aria-current={pathname.startsWith("/account") ? "page" : undefined}
+            >
+              Account
+            </Link>
+          )}
         </nav>
         <Link
           href="/cart"
           className="cart-pill-button"
-          aria-label={landing ? "Shopping cart" : "Shopping bag, 0 items"}
+          aria-label={landing ? "Shopping cart" : `Shopping bag, ${cartCount} items`}
         >
-          {landing ? <svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 4h4l4 18h16l4-13H7"/><path d="M10 22l-1 3h17"/><circle cx="12" cy="29" r="1.5"/><circle cx="25" cy="29" r="1.5"/></svg> : <><ShoppingBagIcon className="cart-pill-icon" /><span>My bag</span><span className="cart-pill-count">0</span></>}
+          {landing ? (
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 4h4l4 18h16l4-13H7"/><path d="M10 22l-1 3h17"/><circle cx="12" cy="29" r="1.5"/><circle cx="25" cy="29" r="1.5"/></svg>
+          ) : (
+            <>
+              <ShoppingBagIcon className="cart-pill-icon" />
+              <span>My bag</span>
+              <span className="cart-pill-count">{cartCount}</span>
+            </>
+          )}
         </Link>
       </div>
     </header>

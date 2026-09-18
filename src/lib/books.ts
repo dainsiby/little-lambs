@@ -19,7 +19,7 @@ function mapBookToItem(book: {
   publisher: string;
   edition: string | null;
   releaseDate: Date | null;
-  price: { toString(): string } | number | string;
+  pricePaise: number;
   stock: number;
   reservedStock: number;
   status: string;
@@ -27,7 +27,7 @@ function mapBookToItem(book: {
 }): BookItem {
   return {
     ...book,
-    price: Number(book.price),
+    price: book.pricePaise / 100,
     status: book.status as BookItem['status'],
     coverImage: '/books/little-lambs-activity-book/cover-front.jpg',
   };

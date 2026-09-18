@@ -32,9 +32,9 @@ describe('Combined Checkout + Orders + Stock Reservation Unit Test Suite', () =>
         phone: '9876543210',
         addressLine1: '123 St Thomas Street',
         city: 'Kochi',
+        district: 'Ernakulam',
         state: 'Kerala',
         postalCode: '682001',
-        country: 'India',
         isDefault: true,
       },
     });

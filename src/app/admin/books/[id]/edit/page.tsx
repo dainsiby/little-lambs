@@ -44,7 +44,7 @@ export default async function EditBookPage({ params }: EditBookPageProps) {
           ageMax: book.ageMax,
           language: book.language,
           publisher: book.publisher,
-          price: Number(book.price),
+          price: Number(book.pricePaise) / 100,
           stock: book.stock,
           status: book.status,
           featured: book.featured,

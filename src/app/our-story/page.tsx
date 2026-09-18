@@ -5,6 +5,8 @@ import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 import { ArrowRight } from "@/components/ui/Icons";
 
+import InnerHeader from "@/components/layout/InnerHeader";
+
 export const metadata = {
   title: "Our Story | Little Lambs Christian Activity Series",
   description: "Learn about Little Lambs — a Christian activity book series for children ages 4–10 created by SMYM Elanji Unit and published by Atma Books.",

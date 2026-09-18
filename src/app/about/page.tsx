@@ -3,6 +3,8 @@ import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 import { ArrowRight } from "@/components/ui/Icons";
 
+import InnerHeader from "@/components/layout/InnerHeader";
+
 export const metadata = {
   title: "About Us | Little Lambs Christian Activity Series",
   description: "Learn about the mission, creator (SMYM Elanji Unit), and publisher (Atma Books) behind Little Lambs Christian activity books.",

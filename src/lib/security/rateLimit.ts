@@ -34,6 +34,11 @@ export async function checkRateLimit(
 ): Promise<{ success: boolean; response?: NextResponse }> {
   const isProduction = process.env.NODE_ENV === 'production';
 
+  // Bypass or expand limit for localhost / test runs in development
+  if (!isProduction && (key.includes('127.0.0.1') || key.includes('::1') || key.includes('localhost'))) {
+    return { success: true };
+  }
+
   // Production check: Fail safely if Upstash Redis configuration is missing in production
   if (isProduction && !upstashRatelimit) {
     console.error('[RateLimit Config Error] Missing UPSTASH_REDIS_REST_URL in production');

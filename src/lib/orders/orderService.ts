@@ -158,7 +158,6 @@ export async function createOrder({
         state: address.state,
         postalCode: address.postalCode,
         landmark: address.landmark,
-        country: address.country,
       },
     });
 

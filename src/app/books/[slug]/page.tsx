@@ -1,11 +1,13 @@
-import { CoverPreview } from "@/components/books/CoverPreview";
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { getBookBySlug, getAllBooks } from "@/lib/data/books";
-import { PageHero } from "@/components/layout/PageHero";
-import { Footer } from "@/components/layout/Footer";
-import { ArrowRight } from "@/components/ui/Icons";
+import React from 'react';
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { getBookBySlugFromDb } from '@/lib/books/bookService';
+import { PageHero } from '@/components/layout/PageHero';
+import { Footer } from '@/components/layout/Footer';
+import { ProductActions } from '@/components/books/ProductActions';
+import { CoverPreview } from '@/components/books/CoverPreview';
+import InnerHeader from '@/components/layout/InnerHeader';
 
 interface BookPageProps {
   params: Promise<{
@@ -13,17 +15,12 @@ interface BookPageProps {
   }>;
 }
 
-export async function generateStaticParams() {
-  const books = getAllBooks();
-  return books.map((book) => ({
-    slug: book.slug,
-  }));
-}
+export const revalidate = 0; // Dynamic server rendering for live inventory
 
 export async function generateMetadata({ params }: BookPageProps) {
   const resolvedParams = await params;
-  const book = getBookBySlug(resolvedParams.slug);
-  if (!book) return { title: "Book Not Found | Little Lambs" };
+  const book = await getBookBySlugFromDb(resolvedParams.slug);
+  if (!book) return { title: 'Book Not Found | Little Lambs' };
 
   return {
     title: `${book.title} — ${book.subtitle || 'Christian Activity Book'} | Little Lambs`,
@@ -33,20 +30,21 @@ export async function generateMetadata({ params }: BookPageProps) {
 
 export default async function BookDetailPage({ params }: BookPageProps) {
   const resolvedParams = await params;
-  const book = getBookBySlug(resolvedParams.slug);
+  const book = await getBookBySlugFromDb(resolvedParams.slug);
 
   if (!book) {
     notFound();
   }
 
-  const primaryImage = book.images[0]?.url || "/images/book-cover.webp";
+  const primaryImage = book.images[0]?.url || '/books/cover-front.png';
+  const availableStock = book.stock ?? 0;
 
   return (
     <main id="main-content" className="site-canvas inner-canvas">
       <div className="landing-hero inner-hero-container">
         <PageHero
           title={book.title}
-          subtitle={book.subtitle}
+          subtitle={book.subtitle || 'English Christian Activity Book'}
           badge={`Ages ${book.ageMin}–${book.ageMax}`}
         />
 
@@ -57,7 +55,7 @@ export default async function BookDetailPage({ params }: BookPageProps) {
               <div className="book-detail-main-image">
                 <Image
                   src={primaryImage}
-                  alt={book.title + " Cover"}
+                  alt={book.title + ' Cover'}
                   width={460}
                   height={600}
                   priority
@@ -68,13 +66,28 @@ export default async function BookDetailPage({ params }: BookPageProps) {
             </div>
 
             {/* Info & Purchase Column */}
-            <div className="book-detail-content">
+            <div className="book-detail-content space-y-4">
               <div className="book-detail-header">
-                <h2 className="detail-title">Made for little moments of discovery.</h2>
+                <nav className="text-xs text-slate-500 mb-2 font-medium">
+                  <Link href="/books" className="hover:underline">
+                    Books
+                  </Link>{' '}
+                  &rarr; <span className="text-slate-800">{book.title}</span>
+                </nav>
+                <h2 className="detail-title">{book.title}</h2>
                 {book.subtitle && <p className="detail-subtitle">{book.subtitle}</p>}
                 <div className="detail-price-box">
-                  <span className="detail-price">{book.currency}{book.price}</span>
-                  <span className="detail-availability-badge">First edition · {book.language}</span>
+                  <span className="detail-price">
+                    {book.currency}
+                    {book.price}
+                  </span>
+                  <span
+                    className={`detail-availability-badge ${
+                      availableStock > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                    }`}
+                  >
+                    {availableStock > 0 ? 'IN STOCK' : 'Currently Out of Stock'} &middot; {book.language}
+                  </span>
                 </div>
               </div>
 
@@ -90,35 +103,46 @@ export default async function BookDetailPage({ params }: BookPageProps) {
                 </ul>
               </div>
 
-              {/* Book Metadata Sheet */}
-              <div className="detail-specs-table">
-                <div className="spec-row">
-                  <span className="spec-label">ISBN:</span>
-                  <span className="spec-value">{book.isbn}</span>
-                </div>
-                <div className="spec-row">
-                  <span className="spec-label">Age Group:</span>
-                  <span className="spec-value">Ages {book.ageMin}–{book.ageMax}</span>
-                </div>
-                <div className="spec-row">
-                  <span className="spec-label">Language:</span>
-                  <span className="spec-value">{book.language}</span>
-                </div>
-                <div className="spec-row">
-                  <span className="spec-label">Creator:</span>
-                  <span className="spec-value">{book.creator}</span>
-                </div>
-                <div className="spec-row">
-                  <span className="spec-label">Publisher:</span>
-                  <span className="spec-value">{book.publisher}</span>
-                </div>
-              </div>
+              {/* Interactive Add to Cart / Buy Now Actions */}
+              <ProductActions
+                bookId={book.id}
+                slug={book.slug}
+                priceDisplay={book.price}
+                availableStock={availableStock}
+              />
 
-              <div className="detail-actions">
-                <Link href="/contact" className="primary-cta">Enquire about this book <ArrowRight /></Link>
-                <Link href="/books" className="secondary-cta">Back to books</Link>
+              {/* Specs Table */}
+              <div className="about-specs-card mt-6">
+                <h3>Book Details & Specifications</h3>
+                <div className="specs-grid">
+                  <div className="spec-row">
+                    <span className="spec-label">Publisher:</span>
+                    <span className="spec-value">{book.publisher}</span>
+                  </div>
+                  <div className="spec-row">
+                    <span className="spec-label">Creator / Unit:</span>
+                    <span className="spec-value">{book.creator}</span>
+                  </div>
+                  <div className="spec-row">
+                    <span className="spec-label">Language:</span>
+                    <span className="spec-value">{book.language}</span>
+                  </div>
+                  <div className="spec-row">
+                    <span className="spec-label">Age Group:</span>
+                    <span className="spec-value">
+                      Ages {book.ageMin} to {book.ageMax}
+                    </span>
+                  </div>
+                  <div className="spec-row">
+                    <span className="spec-label">ISBN:</span>
+                    <span className="spec-value font-mono">{book.isbn}</span>
+                  </div>
+                  <div className="spec-row">
+                    <span className="spec-label">SKU:</span>
+                    <span className="spec-value font-mono">{book.sku}</span>
+                  </div>
+                </div>
               </div>
-              <p className="purchase-notice">Online ordering is not available yet. Contact us about individual copies or books for your parish.</p>
             </div>
           </div>
         </article>

@@ -13,6 +13,7 @@ export const adminRejectPaymentSchema = z.object({
 
 export const adminFulfilmentTransitionSchema = z.object({
   status: z.enum(['PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']),
+  deliveryMethod: z.enum(['DTDC', 'LOCAL_DELIVERY']).optional(),
   shippingCarrier: z.string().trim().optional(),
   trackingNumber: z.string().trim().optional(),
 });
