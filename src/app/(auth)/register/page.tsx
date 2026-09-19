@@ -1,8 +1,8 @@
-"use client";
-
-import { PageHero } from "@/components/layout/PageHero";
-import { Footer } from "@/components/layout/Footer";
-import Link from "next/link";
+import React, { Suspense } from 'react';
+import { PageHero } from '@/components/layout/PageHero';
+import { Footer } from '@/components/layout/Footer';
+import RegisterForm from '@/components/auth/RegisterForm';
+import InnerHeader from '@/components/layout/InnerHeader';
 
 export default function RegisterPage() {
   return (
@@ -10,7 +10,7 @@ export default function RegisterPage() {
       <div className="landing-hero inner-hero-container">
         <PageHero
           title="Create Account"
-          subtitle="Join Little Lambs to order books, manage addresses, and view order status."
+          subtitle="Join Little Lambs to order books, manage saved addresses, and track order status."
           badge="New Customer"
         />
 
@@ -19,68 +19,13 @@ export default function RegisterPage() {
             <h2>Create Your Account</h2>
             <p className="auth-subtitle">Fill in your details below to register</p>
 
-            <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
-              <div className="form-group">
-                <label htmlFor="reg-name">Full Name</label>
-                <input
-                  type="text"
-                  id="reg-name"
-                  name="fullName"
-                  placeholder="e.g. Sarah Joseph"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="reg-email">Email Address</label>
-                <input
-                  type="email"
-                  id="reg-email"
-                  name="email"
-                  placeholder="sarah@example.com"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="reg-password">Password</label>
-                <input
-                  type="password"
-                  id="reg-password"
-                  name="password"
-                  placeholder="Minimum 8 characters"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="reg-confirm-password">Confirm Password</label>
-                <input
-                  type="password"
-                  id="reg-confirm-password"
-                  name="confirmPassword"
-                  placeholder="Repeat your password"
-                  required
-                />
-              </div>
-
-              <button disabled type="submit" className="primary-cta auth-submit-btn">
-                Create Account
-              </button>
-
-              <p className="auth-footer-text">
-                Already have an account?{" "}
-                <Link href="/login" className="auth-link">
-                  Sign in
-                </Link>
-              </p>
-            </form>
-
-            <div className="auth-dev-notice"><p>Customer accounts are not available yet. <Link href="/contact">Contact us</Link> for help with a book enquiry.</p></div>
+            <Suspense fallback={<p>Loading registration form...</p>}>
+              <RegisterForm />
+            </Suspense>
           </div>
         </article>
 
-        <Footer inner />
+        <Footer />
       </div>
     </main>
   );

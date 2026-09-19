@@ -51,10 +51,12 @@ export async function POST(request: Request) {
       );
     }
 
+    const { price, ...rest } = parsed.data;
+    const priceNum = typeof price === 'string' ? parseFloat(price) : price;
     const book = await createAdminBook(
       {
-        ...parsed.data,
-        price: parsed.data.price,
+        ...rest,
+        pricePaise: Math.round(priceNum * 100),
       },
       admin.id
     );

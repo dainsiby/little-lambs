@@ -3,12 +3,16 @@
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Button from '@/components/ui/Button';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirectTo') || '/';
+  const rawUrl = searchParams.get('callbackUrl') || searchParams.get('redirectTo');
+
+  // Safe redirect check: allow internal relative paths starting with / (excluding // and \)
+  const isSafe = rawUrl && rawUrl.startsWith('/') && !rawUrl.startsWith('//') && !rawUrl.includes('\\');
+  const targetRedirect = isSafe ? (rawUrl as string) : '/account';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +34,17 @@ export default function LoginForm() {
       if (res?.error) {
         setError('Invalid email address or password.');
       } else {
-        router.push(redirectTo);
+        try {
+          const sessionRes = await fetch('/api/auth/session');
+          const sessionData = await sessionRes.json();
+          if (sessionData?.user?.role === 'ADMIN' && !rawUrl) {
+            router.push('/admin');
+          } else {
+            router.push(targetRedirect);
+          }
+        } catch {
+          router.push(targetRedirect);
+        }
         router.refresh();
       }
     } catch {
@@ -41,53 +55,52 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="auth-form">
       {error && (
-        <div className="rounded-xl bg-red-50 p-3 text-xs font-semibold text-red-700 border border-red-200">
+        <div className="cart-notice-box" style={{ background: '#fee2e2', color: '#991b1b', borderColor: '#fca5a5' }}>
           {error}
         </div>
       )}
 
-      <div>
-        <label htmlFor="email" className="block text-xs font-semibold text-brand-slate uppercase">
-          Email Address
-        </label>
+      <div className="form-group">
+        <label htmlFor="login-email">Email Address</label>
         <input
-          id="email"
+          id="login-email"
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="focus-ring mt-1 block w-full rounded-xl border border-brand-maroon/20 bg-brand-paper px-3.5 py-2.5 text-sm text-brand-maroon"
           placeholder="your.email@example.com"
         />
       </div>
 
-      <div>
-        <div className="flex items-center justify-between">
-          <label htmlFor="password" className="block text-xs font-semibold text-brand-slate uppercase">
-            Password
-          </label>
-          <a href="/forgot-password" className="text-xs font-semibold text-brand-maroon hover:underline">
+      <div className="form-group">
+        <div className="label-with-link">
+          <label htmlFor="login-password">Password</label>
+          <Link href="/forgot-password" className="forgot-password-link">
             Forgot Password?
-          </a>
+          </Link>
         </div>
         <input
-          id="password"
+          id="login-password"
           type="password"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="focus-ring mt-1 block w-full rounded-xl border border-brand-maroon/20 bg-brand-paper px-3.5 py-2.5 text-sm text-brand-maroon"
           placeholder="••••••••"
         />
       </div>
 
-      <div className="pt-2">
-        <Button type="submit" variant="primary" size="md" className="w-full" disabled={loading}>
-          {loading ? 'Logging in...' : 'Sign In'}
-        </Button>
-      </div>
+      <button type="submit" disabled={loading} className="primary-cta auth-submit-btn">
+        {loading ? 'Signing In...' : 'Sign In'}
+      </button>
+
+      <p className="auth-footer-text">
+        Don&apos;t have an account yet?{' '}
+        <Link href="/register" className="auth-link">
+          Create an account
+        </Link>
+      </p>
     </form>
   );
 }

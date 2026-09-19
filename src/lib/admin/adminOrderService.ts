@@ -315,11 +315,20 @@ export async function updateOrderFulfilment(
       fulfilmentStatus: targetStatus,
     };
 
+    if (validated.deliveryMethod) {
+      updateData.deliveryMethod = validated.deliveryMethod;
+    }
+
     let auditAction = `ORDER_${targetStatus}`;
 
     if (targetStatus === FulfilmentStatus.SHIPPED) {
-      updateData.shippingCarrier = validated.shippingCarrier;
-      updateData.trackingNumber = validated.trackingNumber;
+      if (validated.deliveryMethod === 'LOCAL_DELIVERY') {
+        updateData.shippingCarrier = 'Local Delivery';
+        updateData.trackingNumber = validated.trackingNumber || `LOCAL-${order.orderNumber}`;
+      } else {
+        updateData.shippingCarrier = validated.shippingCarrier || 'DTDC';
+        updateData.trackingNumber = validated.trackingNumber || `DTDC-${order.orderNumber}`;
+      }
       updateData.shippedAt = new Date();
     } else if (targetStatus === FulfilmentStatus.DELIVERED) {
       updateData.deliveredAt = new Date();

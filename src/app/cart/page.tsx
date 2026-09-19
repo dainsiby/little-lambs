@@ -1,15 +1,28 @@
-import { ShoppingBag } from "lucide-react";
-import { PageHero } from "@/components/layout/PageHero";
-import { Footer } from "@/components/layout/Footer";
-import Link from "next/link";
-import { ArrowRight } from "@/components/ui/Icons";
+import React from 'react';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { getOrCreateCart } from '@/lib/cart/cartService';
+import { PageHero } from '@/components/layout/PageHero';
+import { Footer } from '@/components/layout/Footer';
+import { CartView } from '@/components/cart/CartView';
+import InnerHeader from '@/components/layout/InnerHeader';
 
 export const metadata = {
-  title: "Shopping Cart | Little Lambs Store",
-  description: "View and manage items in your Little Lambs shopping cart.",
+  title: 'Shopping Cart | Little Lambs Store',
+  description: 'View and manage items in your Little Lambs shopping cart.',
 };
 
-export default function CartPage() {
+export const revalidate = 0; // Dynamic server rendering for live cart items
+
+export default async function CartPage() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect('/login?callbackUrl=/cart');
+  }
+
+  const cart = await getOrCreateCart(session.user.id);
+
   return (
     <main id="main-content" className="site-canvas inner-canvas">
       <div className="landing-hero inner-hero-container">
@@ -20,21 +33,7 @@ export default function CartPage() {
         />
 
         <article className="cart-container">
-          {/* Polished Empty Cart Shell State */}
-          <div className="empty-cart-card">
-            <div className="empty-cart-icon"><ShoppingBag size={24} aria-hidden="true" /></div>
-            <h2>Your Shopping Cart is Empty</h2>
-            <p>
-              Explore our Christian activity books for children ages 4 to 10 and add them to your cart.
-            </p>
-            <div className="empty-cart-actions">
-              <Link href="/books" className="primary-cta">
-                Browse Books <ArrowRight />
-              </Link>
-            </div>
-          </div>
-
-          <div className="cart-notice-box"><strong>Looking for a copy?</strong><p>Online ordering is not available yet. <Link href="/contact" className="contact-link-inline">Contact the publisher</Link> to enquire about books.</p></div>
+          <CartView initialCart={cart} />
         </article>
 
         <Footer inner />

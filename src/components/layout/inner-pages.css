@@ -122,3 +122,55 @@
  .inner-canvas :is(.editorial-card,.about-card,.about-specs-card,.contact-form-card,.contact-info-card,.empty-cart-card,.account-guest-banner,.auth-card) { padding: 24px; }
  .inner-canvas .detail-cover-img { height: 270px; } .inner-canvas .story-intro img { height: 250px; }
 }
+
+/* Order & Payment presentation styles */
+.inner-canvas .order-detail-wrapper { max-width: 960px; margin: 0 auto 3rem; }
+.inner-canvas .order-card { background: #fffefa; border: 1px solid #e2ddcf; border-radius: 20px; padding: 28px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(10, 30, 50, 0.04); }
+.inner-canvas .order-status-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e8e2d5; padding-bottom: 16px; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.inner-canvas .order-status-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.inner-canvas .status-badge { font-size: 11px; font-weight: 750; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 12px; border-radius: 999px; }
+.inner-canvas .status-badge.paid { background: #dcfce7; color: #14532d; border: 1px solid #bbf7d0; }
+.inner-canvas .status-badge.pending { background: #fef9c3; color: #713f12; border: 1px solid #fef08a; }
+.inner-canvas .status-badge.rejected { background: #fee2e2; color: #7f1d1d; border: 1px solid #fecaca; }
+.inner-canvas .status-badge.fulfilment { background: #e0f2fe; color: #0c4a6e; border: 1px solid #bae6fd; }
+.inner-canvas .address-snapshot-box { background: #faf6eb; border: 1px solid #e6dcc8; border-radius: 14px; padding: 18px; margin-bottom: 24px; }
+.inner-canvas .tracking-info-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 14px; padding: 18px; margin-bottom: 24px; color: #1e40af; }
+.inner-canvas .ordered-item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee8db; padding: 12px 0; }
+.inner-canvas .order-totals-box { border-top: 2px solid #e4dfd2; padding-top: 16px; margin-top: 16px; width: 280px; margin-left: auto; font-size: 14px; }
+.inner-canvas .order-totals-row { display: flex; justify-content: space-between; padding: 4px 0; color: #526775; }
+.inner-canvas .order-totals-grand { font-size: 18px; font-weight: 800; color: #74291e; border-top: 1px solid #e4dfd2; padding-top: 8px; margin-top: 8px; }
+.inner-canvas .payment-banner { padding: 20px; border-radius: 14px; margin-top: 16px; }
+.inner-canvas .payment-banner.paid { background: #f0fdf4; border: 1px solid #bbf7d0; color: #14532d; }
+.inner-canvas .payment-banner.pending { background: #fefce8; border: 1px solid #fef08a; color: #713f12; }
+.inner-canvas .upi-instructions-card { background: #fffcf3; border: 1px solid #e8e2d5; border-radius: 14px; padding: 22px; }
+.inner-canvas .upi-credentials-pill { background: #f3edd9; padding: 14px 18px; border-radius: 12px; margin: 16px 0; display: inline-block; font-size: 13px; line-height: 1.6; }
+
+/* Visual Accent Hero */
+.inner-canvas .inner-hero-content.has-right-image { display: flex; align-items: center; justify-content: space-between; text-align: left; padding: 42px 6% 36px; gap: 32px; }
+.inner-canvas .inner-hero-content.has-right-image .inner-hero-text { max-width: 600px; }
+.inner-canvas .inner-hero-content.has-right-image .inner-hero-subtitle { margin: 0; }
+.inner-canvas .inner-hero-visual-accent { flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
+.inner-canvas .inner-hero-accent-img { max-height: 160px; width: auto; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(18, 58, 90, 0.08)); }
+
+/* Product Card & Badges */
+.inner-canvas .product-card-featured { background: #fffefa; border: 1px solid #e1dccc; border-radius: 24px; overflow: hidden; display: grid; grid-template-columns: 0.95fr 1fr; max-width: 1000px; margin: 0 auto; box-shadow: 0 4px 20px rgba(18, 58, 90, 0.04); }
+.inner-canvas .badge-in-stock { background: #dcfce7; color: #14532d; border: 1px solid #bbf7d0; font-weight: 750; }
+.inner-canvas .badge-out-of-stock { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; font-weight: 750; }
+.inner-canvas .book-card-actions { display: flex; items-center: center; gap: 16px; margin-top: auto; flex-wrap: wrap; }
+.inner-canvas .out-of-stock-notice { display: inline-flex; align-items: center; font-size: 13px; color: #991b1b; font-weight: 600; padding: 10px 18px; background: #fef2f2; border-radius: 999px; border: 1px solid #fee2e2; }
+
+/* Secondary Coming Soon Banner */
+.inner-canvas .coming-soon-secondary-banner { background: #f4eddc; border: 1px dashed #c8bda4; border-radius: 20px; padding: 28px 36px; text-align: center; max-width: 1000px; margin: 32px auto 0; }
+.inner-canvas .coming-soon-badge-small { font-size: 10px; font-weight: 750; uppercase: uppercase; letter-spacing: 0.14em; color: #74291e; display: inline-block; margin-bottom: 8px; }
+.inner-canvas .coming-soon-title { font-family: var(--font-display); font-size: 22px; color: #123a5a; margin-bottom: 8px; }
+.inner-canvas .coming-soon-text { font-size: 14px; color: #4a626e; max-width: 580px; margin: 0 auto; }
+
+@media (max-width: 768px) {
+  .inner-canvas .inner-hero-content.has-right-image { flex-direction: column; text-align: center; padding: 32px 20px; }
+  .inner-canvas .inner-hero-visual-accent { margin-top: 12px; }
+  .inner-canvas .product-card-featured { grid-template-columns: 1fr; }
+  .inner-canvas .book-card-actions { flex-direction: column; width: 100%; }
+  .inner-canvas .view-book-btn { width: 100%; justify-content: center; }
+}
+
+

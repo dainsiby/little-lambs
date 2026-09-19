@@ -95,7 +95,7 @@ export default async function AdminDashboardPage() {
 
               <div className="flex items-center gap-4">
                 <span className="font-heading font-bold text-brand-maroon">
-                  ₹{Number(book.price).toFixed(2)}
+                  ₹{(book.pricePaise / 100).toFixed(2)}
                 </span>
                 <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
                   book.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-800' : 'bg-gray-100 text-gray-700'

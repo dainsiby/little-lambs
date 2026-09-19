@@ -35,7 +35,6 @@ export async function createAddress(userId: string, input: AddressInput) {
       state: validated.state,
       postalCode: validated.postalCode,
       landmark: validated.landmark || null,
-      country: validated.country || 'India',
       isDefault: shouldBeDefault,
     },
   });
@@ -61,7 +60,6 @@ export async function updateAddress(userId: string, addressId: string, input: Pa
     state: input.state ?? existing.state,
     postalCode: input.postalCode ?? existing.postalCode,
     landmark: input.landmark ?? existing.landmark ?? '',
-    country: input.country ?? existing.country,
     isDefault: input.isDefault ?? existing.isDefault,
   };
 
@@ -86,7 +84,6 @@ export async function updateAddress(userId: string, addressId: string, input: Pa
       state: validated.state,
       postalCode: validated.postalCode,
       landmark: validated.landmark || null,
-      country: validated.country || 'India',
       isDefault: validated.isDefault,
     },
   });

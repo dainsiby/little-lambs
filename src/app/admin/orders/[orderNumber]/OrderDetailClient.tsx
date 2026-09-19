@@ -69,7 +69,8 @@ export function OrderDetailClient({ data }: OrderDetailClientProps) {
 
   const [updatingFulfilment, setUpdatingFulfilment] = useState(false);
   const [showShippingModal, setShowShippingModal] = useState(false);
-  const [shippingCarrier, setShippingCarrier] = useState("India Post");
+  const [deliveryMethod, setDeliveryMethod] = useState<"DTDC" | "LOCAL_DELIVERY">("DTDC");
+  const [shippingCarrier, setShippingCarrier] = useState("DTDC");
   const [trackingNumber, setTrackingNumber] = useState("");
 
   const [error, setError] = useState<string | null>(null);
@@ -508,37 +509,62 @@ export function OrderDetailClient({ data }: OrderDetailClientProps) {
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "1rem" }}>
           <div style={{ background: "#FFFFFF", width: "100%", maxWidth: "450px", borderRadius: "8px", padding: "1.5rem" }}>
             <h3 style={{ fontSize: "1.2rem", fontWeight: 700, color: "#1B2A4A", margin: "0 0 0.5rem 0" }}>
-              Enter Shipping & Tracking Information
+              Dispatch & Delivery Method
             </h3>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleFulfilmentTransition("SHIPPED", { shippingCarrier, trackingNumber });
+                handleFulfilmentTransition("SHIPPED", {
+                  deliveryMethod,
+                  shippingCarrier: deliveryMethod === "LOCAL_DELIVERY" ? "Local Delivery" : shippingCarrier || "DTDC",
+                  trackingNumber: deliveryMethod === "LOCAL_DELIVERY" ? undefined : trackingNumber,
+                });
               }}
               style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
             >
               <div>
-                <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "#1B2A4A" }}>Shipping Carrier *</label>
-                <input
-                  type="text"
-                  required
-                  value={shippingCarrier}
-                  onChange={(e) => setShippingCarrier(e.target.value)}
-                  placeholder="e.g. India Post, Blue Dart, DTDC"
-                  style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid #CBD5E0" }}
-                />
+                <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "#1B2A4A" }}>Select Delivery Method *</label>
+                <select
+                  value={deliveryMethod}
+                  onChange={(e) => setDeliveryMethod(e.target.value as "DTDC" | "LOCAL_DELIVERY")}
+                  style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid #CBD5E0", marginTop: "0.25rem" }}
+                >
+                  <option value="DTDC">DTDC Courier</option>
+                  <option value="LOCAL_DELIVERY">Local Direct Delivery</option>
+                </select>
               </div>
-              <div>
-                <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "#1B2A4A" }}>Tracking Number / AWB *</label>
-                <input
-                  type="text"
-                  required
-                  value={trackingNumber}
-                  onChange={(e) => setTrackingNumber(e.target.value)}
-                  placeholder="e.g. IP123456789IN"
-                  style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid #CBD5E0" }}
-                />
-              </div>
+
+              {deliveryMethod === "DTDC" ? (
+                <>
+                  <div>
+                    <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "#1B2A4A" }}>Carrier Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={shippingCarrier}
+                      onChange={(e) => setShippingCarrier(e.target.value)}
+                      placeholder="DTDC"
+                      style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid #CBD5E0" }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "#1B2A4A" }}>DTDC AWB / Tracking Number *</label>
+                    <input
+                      type="text"
+                      required
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      placeholder="e.g. D12345678"
+                      style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid #CBD5E0" }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div style={{ background: "#F0FDF4", padding: "0.75rem", borderRadius: "6px", border: "1px solid #DCFCE7", fontSize: "0.8rem", color: "#166534" }}>
+                  <strong>Local Direct Delivery Selected:</strong> No tracking number required. Order will be displayed to customer as <em>&quot;Out for Local Delivery&quot;</em>.
+                </div>
+              )}
+
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
                 <button
                   type="button"
@@ -552,7 +578,7 @@ export function OrderDetailClient({ data }: OrderDetailClientProps) {
                   disabled={updatingFulfilment}
                   style={{ background: "#8B263E", color: "#FFFFFF", padding: "0.5rem 1rem", borderRadius: "6px", border: "none", cursor: "pointer", fontWeight: 600 }}
                 >
-                  {updatingFulfilment ? "Saving..." : "Mark as SHIPPED"}
+                  {updatingFulfilment ? "Saving..." : "Confirm & Mark SHIPPED"}
                 </button>
               </div>
             </form>

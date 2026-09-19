@@ -9,7 +9,7 @@ async function main() {
   // NO admin credentials or default passwords are created.
   const book = await prisma.book.upsert({
     where: { isbn: '978-93-88909-19-8' },
-    update: {},
+    update: { stock: 50, reservedStock: 0, status: BookStatus.ACTIVE },
     create: {
       title: 'Little Lambs Christian Activity Book',
       subtitle: 'English Christian Activity Book for Children',
@@ -25,8 +25,8 @@ async function main() {
       language: 'English',
       publisher: 'Pavanatma Publishers Pvt. Ltd. / Atma Books',
       edition: 'First Edition',
-      price: 100.00,
-      stock: 0, // Stock set to 0 pending actual business inventory allocation
+      pricePaise: 10000,
+      stock: 50, // Stock set for testing active inventory
       reservedStock: 0,
       status: BookStatus.ACTIVE,
       featured: true,

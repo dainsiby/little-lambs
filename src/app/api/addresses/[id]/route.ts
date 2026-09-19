@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth';
+import { auth } from '@/auth';
 import { updateAddress, deleteAddress, setDefaultAddress } from '@/lib/addresses/addressService';
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {

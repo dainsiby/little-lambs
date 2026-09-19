@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
  */
 export function validateSameOrigin(request: Request): { isValid: boolean; errorResponse?: NextResponse } {
   const method = request.method.toUpperCase();
-  
+
   // Safe methods do not mutate state
   if (['GET', 'HEAD', 'OPTIONS'].includes(method)) {
     return { isValid: true };
@@ -25,9 +25,15 @@ export function validateSameOrigin(request: Request): { isValid: boolean; errorR
 
   if (origin && host) {
     try {
-      const originUrl = new URL(origin);
-      if (originUrl.host !== host) {
-        console.warn(`[CSRF Rejected] Origin mismatch: ${originUrl.host} vs ${host}`);
+      const originHost = new URL(origin).host.toLowerCase();
+      const targetHost = host.toLowerCase();
+
+      const isLocalhostMatch =
+        (originHost.startsWith('localhost') || originHost.startsWith('127.0.0.1')) &&
+        (targetHost.startsWith('localhost') || targetHost.startsWith('127.0.0.1'));
+
+      if (originHost !== targetHost && !isLocalhostMatch) {
+        console.warn(`[CSRF Rejected] Origin mismatch: ${originHost} vs ${targetHost}`);
         return {
           isValid: false,
           errorResponse: NextResponse.json(

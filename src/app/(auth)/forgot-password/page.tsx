@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Button from '@/components/ui/Button';
+import { PageHero } from '@/components/layout/PageHero';
+import { Footer } from '@/components/layout/Footer';
+import InnerHeader from '@/components/layout/InnerHeader';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -30,52 +32,58 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <main className="flex min-h-[75vh] flex-col items-center justify-center p-6 bg-brand-cream">
-      <div className="w-full max-w-md space-y-6 rounded-3xl border border-brand-maroon/15 bg-brand-paper p-8 shadow-sm">
-        <div className="text-center space-y-2">
-          <h1 className="font-heading text-3xl font-extrabold text-brand-maroon">
-            Reset Password
-          </h1>
-          <p className="text-xs text-brand-slate">
-            Enter your email address to receive password reset instructions
-          </p>
-        </div>
+    <main id="main-content" className="site-canvas inner-canvas">
+      <div className="landing-hero inner-hero-container">
+        <PageHero
+          title="Reset Password"
+          subtitle="Enter your email address to receive password reset instructions."
+          badge="Account Recovery"
+        />
 
-        {message ? (
-          <div className="rounded-2xl bg-emerald-50 p-4 text-center text-xs font-semibold text-emerald-800 border border-emerald-200 space-y-3">
-            <p>{message}</p>
-            <Link href="/login" className="inline-block font-bold text-brand-maroon hover:underline">
-              Return to Sign In
-            </Link>
+        <article className="auth-container">
+          <div className="auth-card">
+            <h2>Forgot Your Password?</h2>
+            <p className="auth-subtitle">We will send a reset link to your email</p>
+
+            {message ? (
+              <div className="cart-notice-box" style={{ background: '#f0fdf4', color: '#166534', borderColor: '#bbf7d0' }}>
+                <p>{message}</p>
+                <div style={{ marginTop: '12px' }}>
+                  <Link href="/login" className="auth-link">
+                    Return to Sign In
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="auth-form">
+                <div className="form-group">
+                  <label htmlFor="email">Email Address</label>
+                  <input
+                    id="email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+
+                <button type="submit" disabled={loading} className="primary-cta auth-submit-btn">
+                  {loading ? 'Sending Instructions...' : 'Send Reset Link'}
+                </button>
+
+                <p className="auth-footer-text">
+                  Remembered your password?{' '}
+                  <Link href="/login" className="auth-link">
+                    Sign In
+                  </Link>
+                </p>
+              </form>
+            )}
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-xs font-semibold text-brand-slate uppercase">
-                Registered Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="focus-ring mt-1 block w-full rounded-xl border border-brand-maroon/20 bg-brand-paper px-3.5 py-2.5 text-sm text-brand-maroon"
-                placeholder="your.email@example.com"
-              />
-            </div>
+        </article>
 
-            <Button type="submit" variant="primary" size="md" className="w-full" disabled={loading}>
-              {loading ? 'Processing...' : 'Send Reset Instructions'}
-            </Button>
-
-            <div className="text-center pt-2 text-xs text-brand-slate">
-              <Link href="/login" className="font-bold text-brand-maroon hover:underline">
-                Back to Sign In
-              </Link>
-            </div>
-          </form>
-        )}
+        <Footer />
       </div>
     </main>
   );

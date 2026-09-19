@@ -90,7 +90,7 @@ test.describe('Phase 6 — Admin Operations & Security Attack E2E Suite', () => 
 
   test('2. Admin Full Operational Flow: Dashboard, Books, Inventory, Payment Verification, Fulfilment & Customer Tracking', async ({ page }) => {
     // 1. Admin Login
-    await page.goto('/login');
+    await page.goto('/login?callbackUrl=/admin');
     await page.fill('#login-email', adminEmail);
     await page.fill('#login-password', password);
     await page.click('button[type="submit"]');

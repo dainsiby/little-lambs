@@ -1,64 +1,89 @@
-import { UserRound, ClipboardList, House, LockKeyhole } from "lucide-react";
-import { PageHero } from "@/components/layout/PageHero";
-import { Footer } from "@/components/layout/Footer";
-import Link from "next/link";
-import { ArrowRight } from "@/components/ui/Icons";
+import React from 'react';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { PageHero } from '@/components/layout/PageHero';
+import { Footer } from '@/components/layout/Footer';
+import InnerHeader from '@/components/layout/InnerHeader';
+import Link from 'next/link';
+import { UserRound, ClipboardList, ShoppingBag, ArrowRight } from 'lucide-react';
+import SignOutButton from '@/components/auth/SignOutButton';
 
 export const metadata = {
-  title: "My Account | Little Lambs Store",
-  description: "Manage your Little Lambs profile, addresses, and order history.",
+  title: 'My Account | Little Lambs Store',
+  description: 'Manage your Little Lambs profile, addresses, and order history.',
 };
 
-export default function AccountPage() {
+export default async function AccountPage() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect('/login?callbackUrl=/account');
+  }
+
   return (
     <main id="main-content" className="site-canvas inner-canvas">
       <div className="landing-hero inner-hero-container">
         <PageHero
-          title="Customer Account"
-          subtitle="Manage your saved details, delivery addresses, and purchase history."
-          badge="Customer Portal"
+          title="Customer Profile"
+          subtitle={`Welcome back, ${session.user.name || session.user.email}!`}
+          badge="My Account"
         />
 
-        <article className="account-container">
-          {/* Guest State Banner */}
-          <div className="account-guest-banner">
-            <div className="guest-banner-icon"><UserRound size={24} aria-hidden="true" /></div>
-            <div className="guest-banner-content">
-              <h2>Sign in to view your account</h2>
-              <p>Please log in or register a new customer account to access saved details and order tracking.</p>
-              <div className="guest-banner-actions">
-                <Link href="/login" className="primary-cta">
-                  Sign In <ArrowRight />
-                </Link>
-                <Link href="/register" className="secondary-cta">
-                  Create Account
-                </Link>
+        <article className="account-container max-w-4xl mx-auto space-y-6 pb-12">
+          {/* Customer Profile Summary Card */}
+          <div className="editorial-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-full bg-[#f3edd9] flex items-center justify-center text-[#74291e] font-bold text-xl">
+                <UserRound size={28} />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-[#092e4c] m-0">
+                  {session.user.name || 'Little Lambs Customer'}
+                </h2>
+                <p className="text-sm text-[#4a626e] m-0">{session.user.email}</p>
+                <span className="inline-block mt-1 text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#e8ede3] text-[#455939]">
+                  Customer Account
+                </span>
               </div>
             </div>
+
+            <SignOutButton />
           </div>
 
-          {/* Placeholders for Future Account Sections */}
+          {/* Quick Action Navigation Grid */}
           <div className="account-placeholders-grid">
-            <div className="account-placeholder-card">
-              <span className="placeholder-icon"><ClipboardList size={24} aria-hidden="true" /></span>
+            <Link href="/account/orders" className="account-placeholder-card group block hover:border-[#74291e] transition-colors">
+              <span className="placeholder-icon text-[#74291e]">
+                <ClipboardList size={28} />
+              </span>
               <h3>Order History</h3>
-              <p>View past orders, receipt details, and delivery tracking status.</p>
-              <span className="placeholder-tag">Requires Sign In</span>
-            </div>
+              <p>View past book orders, receipt summaries, and delivery tracking status.</p>
+              <span className="primary-cta mt-4 text-xs font-bold py-2 px-4 inline-flex items-center gap-1">
+                View Orders &rarr;
+              </span>
+            </Link>
 
-            <div className="account-placeholder-card">
-              <span className="placeholder-icon"><House size={24} aria-hidden="true" /></span>
-              <h3>Delivery Addresses</h3>
-              <p>Save shipping addresses for faster future order checkout.</p>
-              <span className="placeholder-tag">Requires Sign In</span>
-            </div>
+            <Link href="/checkout" className="account-placeholder-card group block hover:border-[#74291e] transition-colors">
+              <span className="placeholder-icon text-[#74291e]">
+                <ShoppingBag size={28} />
+              </span>
+              <h3>Saved Addresses</h3>
+              <p>Manage shipping addresses for fast checkout during your next order.</p>
+              <span className="secondary-cta mt-4 text-xs font-bold py-2 px-4 inline-flex items-center gap-1">
+                Manage Addresses &rarr;
+              </span>
+            </Link>
 
-            <div className="account-placeholder-card">
-              <span className="placeholder-icon"><LockKeyhole size={24} aria-hidden="true" /></span>
-              <h3>Account Security</h3>
-              <p>Update your email address, full name, and login password.</p>
-              <span className="placeholder-tag">Requires Sign In</span>
-            </div>
+            <Link href="/books" className="account-placeholder-card group block hover:border-[#74291e] transition-colors">
+              <span className="placeholder-icon text-[#74291e]">
+                <ArrowRight size={28} />
+              </span>
+              <h3>Explore Bookshop</h3>
+              <p>Discover Little Lambs Christian activity books, stories, and prayers.</p>
+              <span className="secondary-cta mt-4 text-xs font-bold py-2 px-4 inline-flex items-center gap-1">
+                Browse Books &rarr;
+              </span>
+            </Link>
           </div>
         </article>
 

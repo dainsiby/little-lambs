@@ -1,91 +1,86 @@
-import { Info } from "lucide-react";
-import { PageHero } from "@/components/layout/PageHero";
-import { Footer } from "@/components/layout/Footer";
-import Link from "next/link";
-import { ArrowRight } from "@/components/ui/Icons";
+import React from 'react';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { getOrCreateCart } from '@/lib/cart/cartService';
+import { getUserAddresses } from '@/lib/addresses/addressService';
+import { calculateShippingPaise } from '@/lib/shipping/shippingStrategy';
+import { PageHero } from '@/components/layout/PageHero';
+import { Footer } from '@/components/layout/Footer';
+import { CheckoutForm } from '@/components/checkout/CheckoutForm';
+import InnerHeader from '@/components/layout/InnerHeader';
+import Link from 'next/link';
+import { ArrowRight, ShoppingBag } from 'lucide-react';
 
 export const metadata = {
-  title: "Checkout | Little Lambs Store",
-  description: "Complete your book order with shipping details and manual UPI payment.",
+  title: 'Checkout | Little Lambs Store',
+  description: 'Complete your book order with shipping details and manual UPI payment.',
 };
 
-export default function CheckoutPage() {
+export const revalidate = 0; // Dynamic server rendering for live checkout
+
+export default async function CheckoutPage() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect('/login?callbackUrl=/checkout');
+  }
+
+  const cart = await getOrCreateCart(session.user.id);
+
+  if (cart.items.length === 0) {
+    return (
+      <main id="main-content" className="site-canvas inner-canvas">
+        <div className="landing-hero inner-hero-container">
+          <PageHero
+            title="Checkout"
+            subtitle="Complete your delivery address and payment details."
+            badge="Ordering Information"
+          />
+
+          <article className="checkout-container">
+            <div className="empty-cart-card text-center py-12">
+              <div className="empty-cart-icon text-brand-maroon flex justify-center mb-4">
+                <ShoppingBag size={48} />
+              </div>
+              <h2 className="text-2xl font-bold mb-2">Your shopping bag is currently empty</h2>
+              <p className="text-slate-600 mb-6 max-w-md mx-auto">
+                Add Little Lambs activity books to your cart before proceeding to checkout.
+              </p>
+              <div className="flex justify-center">
+                <Link href="/books" className="primary-cta font-bold">
+                  Browse Books <ArrowRight size={18} />
+                </Link>
+              </div>
+            </div>
+          </article>
+
+          <Footer inner />
+        </div>
+      </main>
+    );
+  }
+
+  const addresses = await getUserAddresses(session.user.id);
+  const shippingPaise = calculateShippingPaise(cart.subtotalPaise);
+  const totalPaise = cart.subtotalPaise + shippingPaise;
+
   return (
     <main id="main-content" className="site-canvas inner-canvas">
       <div className="landing-hero inner-hero-container">
         <PageHero
           title="Checkout"
-          subtitle="Complete your delivery address and payment details."
-          badge="Ordering information"
+          subtitle="Select your delivery address and place your order."
+          badge="Secure Checkout"
         />
 
         <article className="checkout-container">
-          <div className="checkout-grid">
-            {/* Inactive Form Steps */}
-            <div className="checkout-steps-column">
-              {/* Step 1: Customer Info */}
-              <div className="checkout-step-card disabled-step">
-                <div className="step-header">
-                  <span className="step-number">1</span>
-                  <h3>Contact &amp; Account Information</h3>
-                </div>
-                <div className="step-body">
-                  <p className="step-placeholder-text">
-                    Email address and phone number for order updates.
-                  </p>
-                </div>
-              </div>
-
-              {/* Step 2: Shipping Address */}
-              <div className="checkout-step-card disabled-step">
-                <div className="step-header">
-                  <span className="step-number">2</span>
-                  <h3>Shipping Address</h3>
-                </div>
-                <div className="step-body">
-                  <p className="step-placeholder-text">
-                    Recipient name, house/street address, city, state, pincode, and phone number.
-                  </p>
-                </div>
-              </div>
-
-              {/* Step 3: Payment Method */}
-              <div className="checkout-step-card disabled-step">
-                <div className="step-header">
-                  <span className="step-number">3</span>
-                  <h3>Payment Method (Manual UPI)</h3>
-                </div>
-                <div className="step-body">
-                  <p className="step-placeholder-text">
-                    Manual UPI transfer with UTR transaction reference verification.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Order Summary Column */}
-            <div className="checkout-summary-column">
-              <div className="checkout-summary-card">
-                <h3>Order Summary</h3>
-                <div className="summary-empty-notice">
-                  <p>Your shopping cart is currently empty.</p>
-                </div>
-                <div className="summary-actions">
-                  <Link href="/books" className="primary-cta summary-btn">
-                    Browse Books <ArrowRight />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="checkout-integration-notice">
-                <span className="notice-icon"><Info size={24} aria-hidden="true" /></span>
-                <div className="notice-content">
-                  <strong>Online ordering is not available yet</strong>
-                  <p>Please contact the publisher about availability and ordering. No payment is collected on this page.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <CheckoutForm
+            cart={cart}
+            initialAddresses={addresses}
+            shippingPaise={shippingPaise}
+            subtotalPaise={cart.subtotalPaise}
+            totalPaise={totalPaise}
+          />
         </article>
 
         <Footer inner />

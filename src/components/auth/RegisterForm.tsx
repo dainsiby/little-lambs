@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/ui/Button';
+import Link from 'next/link';
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -10,13 +10,24 @@ export default function RegisterForm() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long.');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -29,7 +40,6 @@ export default function RegisterForm() {
           fullName,
           email,
           password,
-          phone,
         }),
       });
 
@@ -48,78 +58,73 @@ export default function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="auth-form">
       {error && (
-        <div className="rounded-xl bg-red-50 p-3 text-xs font-semibold text-red-700 border border-red-200">
+        <div className="cart-notice-box" style={{ background: '#fee2e2', color: '#991b1b', borderColor: '#fca5a5' }}>
           {error}
         </div>
       )}
 
-      <div>
-        <label htmlFor="fullName" className="block text-xs font-semibold text-brand-slate uppercase">
-          Full Name
-        </label>
+      <div className="form-group">
+        <label htmlFor="reg-name">Full Name</label>
         <input
-          id="fullName"
+          id="reg-name"
           type="text"
           required
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          className="focus-ring mt-1 block w-full rounded-xl border border-brand-maroon/20 bg-brand-paper px-3.5 py-2.5 text-sm text-brand-maroon"
           placeholder="First & Last Name"
         />
       </div>
 
-      <div>
-        <label htmlFor="email" className="block text-xs font-semibold text-brand-slate uppercase">
-          Email Address
-        </label>
+      <div className="form-group">
+        <label htmlFor="reg-email">Email Address</label>
         <input
-          id="email"
+          id="reg-email"
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="focus-ring mt-1 block w-full rounded-xl border border-brand-maroon/20 bg-brand-paper px-3.5 py-2.5 text-sm text-brand-maroon"
           placeholder="your.email@example.com"
         />
       </div>
 
-      <div>
-        <label htmlFor="phone" className="block text-xs font-semibold text-brand-slate uppercase">
-          Phone Number (Optional)
-        </label>
+      <div className="form-group">
+        <label htmlFor="reg-password">Password (min 8 characters)</label>
         <input
-          id="phone"
-          type="tel"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="focus-ring mt-1 block w-full rounded-xl border border-brand-maroon/20 bg-brand-paper px-3.5 py-2.5 text-sm text-brand-maroon"
-          placeholder="+91 98765 43210"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="password" className="block text-xs font-semibold text-brand-slate uppercase">
-          Password (min 8 characters)
-        </label>
-        <input
-          id="password"
+          id="reg-password"
           type="password"
           required
           minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="focus-ring mt-1 block w-full rounded-xl border border-brand-maroon/20 bg-brand-paper px-3.5 py-2.5 text-sm text-brand-maroon"
           placeholder="••••••••"
         />
       </div>
 
-      <div className="pt-2">
-        <Button type="submit" variant="primary" size="md" className="w-full" disabled={loading}>
-          {loading ? 'Creating Account...' : 'Register Account'}
-        </Button>
+      <div className="form-group">
+        <label htmlFor="reg-confirm-password">Confirm Password</label>
+        <input
+          id="reg-confirm-password"
+          type="password"
+          required
+          minLength={8}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="••••••••"
+        />
       </div>
+
+      <button type="submit" disabled={loading} className="primary-cta auth-submit-btn">
+        {loading ? 'Creating Account...' : 'Register Account'}
+      </button>
+
+      <p className="auth-footer-text">
+        Already have an account?{' '}
+        <Link href="/login" className="auth-link">
+          Sign In
+        </Link>
+      </p>
     </form>
   );
 }
