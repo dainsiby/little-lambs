@@ -3,10 +3,10 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { PageHero } from '@/components/layout/PageHero';
 import { Footer } from '@/components/layout/Footer';
-import InnerHeader from '@/components/layout/InnerHeader';
 import Link from 'next/link';
-import { UserRound, ClipboardList, ShoppingBag, ArrowRight } from 'lucide-react';
+import { UserRound, ClipboardList, ShoppingBag, ArrowRight, ShieldCheck } from 'lucide-react';
 import SignOutButton from '@/components/auth/SignOutButton';
+import { prisma } from '@/lib/db/prisma';
 
 export const metadata = {
   title: 'My Account | Little Lambs Store',
@@ -20,6 +20,14 @@ export default async function AccountPage() {
     redirect('/login?callbackUrl=/account');
   }
 
+  // Fetch live role from PostgreSQL
+  const dbUser = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true },
+  });
+
+  const isAdmin = dbUser?.role === 'ADMIN';
+
   return (
     <main id="main-content" className="site-canvas inner-canvas">
       <div className="landing-hero inner-hero-container">
@@ -30,7 +38,7 @@ export default async function AccountPage() {
         />
 
         <article className="account-container max-w-4xl mx-auto space-y-6 pb-12">
-          {/* Customer Profile Summary Card */}
+          {/* Profile Summary Card */}
           <div className="editorial-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-[#f3edd9] flex items-center justify-center text-[#74291e] font-bold text-xl">
@@ -41,17 +49,44 @@ export default async function AccountPage() {
                   {session.user.name || 'Little Lambs Customer'}
                 </h2>
                 <p className="text-sm text-[#4a626e] m-0">{session.user.email}</p>
-                <span className="inline-block mt-1 text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#e8ede3] text-[#455939]">
-                  Customer Account
-                </span>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`inline-block text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                    isAdmin ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-[#e8ede3] text-[#455939]'
+                  }`}>
+                    {isAdmin ? 'ADMINISTRATOR' : 'CUSTOMER ACCOUNT'}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <SignOutButton />
+            <div className="flex items-center gap-3">
+              {isAdmin && (
+                <Link
+                  href="/admin/dashboard"
+                  className="bg-[#74291e] hover:bg-[#5a2017] text-white font-bold text-xs py-2 px-4 rounded-xl transition-colors inline-flex items-center gap-1.5 shadow-xs"
+                >
+                  <ShieldCheck size={16} />
+                  <span>Admin Portal</span>
+                </Link>
+              )}
+              <SignOutButton />
+            </div>
           </div>
 
           {/* Quick Action Navigation Grid */}
           <div className="account-placeholders-grid">
+            {isAdmin && (
+              <Link href="/admin/dashboard" className="account-placeholder-card group block hover:border-[#74291e] transition-colors border-amber-300 bg-amber-50/40">
+                <span className="placeholder-icon text-[#74291e]">
+                  <ShieldCheck size={28} />
+                </span>
+                <h3>Admin Control Panel</h3>
+                <p>Manage order fulfillment, verify UTR payments, track inventory, and edit catalogue books.</p>
+                <span className="primary-cta mt-4 text-xs font-bold py-2 px-4 inline-flex items-center gap-1">
+                  Access Admin Portal &rarr;
+                </span>
+              </Link>
+            )}
             <Link href="/account/orders" className="account-placeholder-card group block hover:border-[#74291e] transition-colors">
               <span className="placeholder-icon text-[#74291e]">
                 <ClipboardList size={28} />
